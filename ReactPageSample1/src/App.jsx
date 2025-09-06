@@ -47,7 +47,7 @@ function Home() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/LabActivity">
       <Routes>
         <Route path="/" element={<Home />} />
   <Route path="/checkpoints" element={<Checkpoints />} />
