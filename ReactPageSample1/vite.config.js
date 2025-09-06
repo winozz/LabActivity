@@ -5,3 +5,5 @@ export default defineConfig({
   base: '/LabActivity/', // Use your repo name here
   plugins: [react()],
 });
+
+
