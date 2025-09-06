@@ -22,6 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       APP_DIR: ReactPageSample1
+  # Set to 'true' to deploy the raw source folder (index.html at project root) instead of the Vite build output in dist
+  # NOTE: Deploying source without building only works for very simple static HTML; a typical Vite React app MUST be built.
+  DEPLOY_SOURCE: 'false'
     defaults:
       run:
         working-directory: ${{ env.APP_DIR }}
@@ -34,24 +37,36 @@ jobs:
           node-version: 20
           cache: npm
           cache-dependency-path: ${{ env.APP_DIR }}/package-lock.json
-      - name: Install dependencies
+      - name: Install dependencies (skip if deploying raw source)
+        if: env.DEPLOY_SOURCE != 'true'
         run: npm ci
-      - name: Build
+      - name: Build (skip when deploying raw source)
+        if: env.DEPLOY_SOURCE != 'true'
         run: npm run build --if-present
       # - name: Run tests (disabled - add real tests then enable)
       #   run: npm test
-      - name: Create 404.html for SPA routing
+      - name: Create 404.html for SPA routing (built)
+        if: env.DEPLOY_SOURCE != 'true'
         run: cp dist/index.html dist/404.html
-      - name: List build output (debug)
+      - name: Create 404.html for SPA routing (source)
+        if: env.DEPLOY_SOURCE == 'true'
+        run: cp index.html 404.html
+      - name: List output (debug)
         run: |
-          echo "Built files:" 
-          ls -al dist
+          echo "Listing output directory:" 
+          if [ "${{ env.DEPLOY_SOURCE }}" = "true" ]; then ls -al .; else ls -al dist; fi
           echo "Index head snippet:" 
-          head -n 20 dist/index.html
-      - name: Upload build artifact for Pages
+          if [ "${{ env.DEPLOY_SOURCE }}" = "true" ]; then head -n 20 index.html; else head -n 20 dist/index.html; fi
+      - name: Upload artifact for Pages (built)
+        if: env.DEPLOY_SOURCE != 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ env.APP_DIR }}/dist
+      - name: Upload artifact for Pages (source)
+        if: env.DEPLOY_SOURCE == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ env.APP_DIR }}
 
   deploy:
     environment:
