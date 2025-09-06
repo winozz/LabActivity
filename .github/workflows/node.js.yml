@@ -24,7 +24,7 @@ jobs:
       APP_DIR: ReactPageSample1
       # Set to 'true' to deploy the raw source folder (index.html at project root) instead of the Vite build output in dist
       # NOTE: Deploying source without building only works for very simple static HTML; a typical Vite React app MUST be built.
-      DEPLOY_SOURCE: 'true'
+      DEPLOY_SOURCE: 'false'
     defaults:
       run:
         working-directory: ${{ env.APP_DIR }}
