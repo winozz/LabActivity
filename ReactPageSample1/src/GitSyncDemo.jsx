@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 // Simple id generator
@@ -15,29 +15,86 @@ const seed = [
 ];
 
 export default function GitSyncDemo(){
-  const [commits, setCommits] = useState(seed);
+  const [commits, setCommits] = useState(seed.map(c => ({...c, changed: []})));
+  const [showIDE, setShowIDE] = useState(false);
+  const [activity, setActivity] = useState([]); // {time,msg}
+
+  const filePool = [
+    'src/App.jsx',
+    'src/components/Cart.jsx',
+    'src/pages/Dashboard.jsx',
+    'src/hooks/useAuth.js',
+    'src/styles.css',
+    'README.md'
+  ];
+
+  function log(msg){
+    setActivity(a => [...a.slice(-49), { time: Date.now(), msg }]);
+  }
 
   const ahead = useMemo(()=> commits.filter(c => c.local && !c.remote).length, [commits]);
   const behind = useMemo(()=> commits.filter(c => c.remote && !c.local).length, [commits]);
 
+  const pickFiles = () => {
+    const count = Math.random() < 0.5 ? 1 : 2;
+    const shuffled = [...filePool].sort(()=> Math.random()-0.5);
+    return shuffled.slice(0,count);
+  };
+
   function commitLocal(){
     const id = nextId();
-    setCommits(prev => [...prev, { id, label: `local change ${id}`, local:true, remote:false }]);
+    const changed = pickFiles();
+    setCommits(prev => [...prev, { id, label: `local change ${id}`, local:true, remote:false, changed }]);
+    log(`Local commit ${id} (${changed.join(', ')})`);
   }
   function push(){
     setCommits(prev => prev.map(c => c.local && !c.remote ? { ...c, remote:true } : c));
+    log('Pushed local commits to origin');
   }
   function simulateRemotePush(){
     const id = nextId();
-    setCommits(prev => [...prev, { id, label: `remote change ${id}`, local:false, remote:true }]);
+    const changed = pickFiles();
+    setCommits(prev => [...prev, { id, label: `remote change ${id}`, local:false, remote:true, changed }]);
+    log(`Remote commit appeared ${id} (${changed.join(', ')})`);
   }
   function pull(){
-    setCommits(prev => prev.map(c => c.remote && !c.local ? { ...c, local:true } : c));
+    let pulled = 0;
+    setCommits(prev => prev.map(c => {
+      if(c.remote && !c.local){ pulled++; return { ...c, local:true }; }
+      return c;
+    }));
+    log(pulled? `Pulled ${pulled} remote commit(s)` : 'Nothing to pull');
   }
   function reset(){
     counter = 5;
-    setCommits(seed.map(c => ({...c})));
+    setCommits(seed.map(c => ({...c, changed: []})));
+    setActivity([]);
+    log('Reset simulation state');
   }
+
+  const latestLocalChangeFiles = useMemo(()=> {
+    const last = [...commits].reverse().find(c => c.local && !c.remote);
+    return last?.changed || [];
+  }, [commits]);
+  const latestRemoteChangeFiles = useMemo(()=> {
+    const last = [...commits].reverse().find(c => c.remote && !c.local);
+    return last?.changed || [];
+  }, [commits]);
+
+  const fileStatus = useCallback((file) => {
+    const localTouched = latestLocalChangeFiles.includes(file);
+    const remoteTouched = latestRemoteChangeFiles.includes(file);
+    if(localTouched && remoteTouched) return 'both';
+    if(localTouched) return 'local';
+    if(remoteTouched) return 'remote';
+    return 'clean';
+  }, [latestLocalChangeFiles, latestRemoteChangeFiles]);
+
+  useEffect(() => {
+    function onKey(e){ if(e.key==='Escape') setShowIDE(false); }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   return (
     <main className="app-shell git-sync-demo">
@@ -56,6 +113,7 @@ export default function GitSyncDemo(){
         <button onClick={simulateRemotePush}>Simulate Remote Push</button>
         <button onClick={pull} disabled={behind===0}>Pull</button>
         <button onClick={reset}>Reset</button>
+  <button onClick={()=> setShowIDE(true)}>Open VS Workspace Mock</button>
       </section>
 
       <div className="git-stream" aria-label="Commit history">
@@ -91,6 +149,58 @@ export default function GitSyncDemo(){
       </section>
 
       <p style={{marginTop:'2rem', fontSize:'.7rem'}}><Link to="/">← Back Home</Link></p>
+
+      {showIDE && (
+        <div className="ide-overlay" role="dialog" aria-modal="true">
+          <div className="ide-modal">
+            <div className="ide-titlebar">
+              <span>VS Workspace Mock • branch: main</span>
+              <button className="ide-close" onClick={()=> setShowIDE(false)} aria-label="Close">×</button>
+            </div>
+            <div className="ide-body">
+              <aside className="ide-sidebar" aria-label="Explorer">
+                <div className="panel-heading">EXPLORER</div>
+                <ul className="file-tree">
+                  {filePool.map(f => {
+                    const st = fileStatus(f);
+                    return (
+                      <li key={f} className={`file-item ${st}`}>
+                        <span className="dot" />
+                        <span className="name">{f}</span>
+                        {st !== 'clean' && <span className={`badge ${st}`}>{st}</span>}
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="panel-heading" style={{marginTop:'1rem'}}>SCM</div>
+                <div className="scm-stats">
+                  <div>Ahead: {ahead}</div>
+                  <div>Behind: {behind}</div>
+                  <div>Total: {commits.length}</div>
+                </div>
+              </aside>
+              <main className="ide-main" aria-label="Editor">
+                <div className="editor-tabs">
+                  <div className="tab active">README.md</div>
+                  <div className="tab">src/App.jsx</div>
+                </div>
+                <div className="editor-content">
+{`# Project Demo\n\nLatest local files changed: ${latestLocalChangeFiles.join(', ') || 'None'}\nLatest remote files changed: ${latestRemoteChangeFiles.join(', ') || 'None'}\n\nAhead: ${ahead}  Behind: ${behind}\n\nUse the buttons outside this modal to create commits, then watch badges update.`}
+                </div>
+                <div className="terminal-panel" aria-label="Activity Log">
+                  <div className="panel-heading small">TERMINAL / OUTPUT</div>
+                  <div className="activity-scroll">
+                    {activity.length===0 && <div className="placeholder">(no activity yet)</div>}
+                    {activity.slice().reverse().map(a => (
+                      <div key={a.time} className="log-line">{new Date(a.time).toLocaleTimeString()} — {a.msg}</div>
+                    ))}
+                  </div>
+                </div>
+              </main>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
