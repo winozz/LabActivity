@@ -16,7 +16,7 @@ export default function V04Accounts() {
     <VersionShell version="0.4" title="User Accounts" focus="Accounts">
       {!currentUser && (
         <form onSubmit={login} style={{display:'flex', gap:'.5rem', flexWrap:'wrap'}}>
-          <input value={username} onChange={e => setUsername(e.target.value)} placeholder="username (alice / bob)" style={{padding:'.4rem .6rem', fontSize:'.75rem'}} />
+          <input value={username} onChange={e => setUsername(e.target.value)} placeholder="username (alec / bert)" style={{padding:'.4rem .6rem', fontSize:'.75rem'}} />
           <button type="submit" style={{fontSize:'.7rem', padding:'.4rem .8rem'}}>Login</button>
         </form>
       )}

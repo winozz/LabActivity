@@ -14,6 +14,7 @@ import V08Payment from './versions/V08Payment.jsx';
 import V10Release from './versions/V10Release.jsx';
 import VersionsIndex from './versions/VersionsIndex.jsx';
 import AllInOne from './versions/AllInOne.jsx';
+import GitSyncDemo from '../src/GitSyncDemo.jsx';
 import V11AccountMgmt from './versions/V11AccountMgmt.jsx';
 
 function Home() {
@@ -35,6 +36,7 @@ function Home() {
         <Link to="/versions/v0.8">v0.8</Link>
   <Link to="/versions/v1.0">v1.0</Link>
   <Link to="/versions/v1.1">v1.1</Link>
+  <Link to="/git-sync">Git Sync Demo</Link>
   <Link to="/versions/all">All-In-One</Link>
       </nav>
     </main>
@@ -60,6 +62,7 @@ export default function App() {
   <Route path="/versions/v0.8" element={<V08Payment />} />
   <Route path="/versions/v1.0" element={<V10Release />} />
   <Route path="/versions/v1.1" element={<V11AccountMgmt />} />
+  <Route path="/git-sync" element={<GitSyncDemo />} />
   <Route path="/versions/all" element={<AllInOne />} />
       </Routes>
     </BrowserRouter>

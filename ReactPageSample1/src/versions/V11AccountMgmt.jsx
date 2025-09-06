@@ -4,7 +4,7 @@ import VersionShell from '../layout/VersionShell.jsx';
 // Simple in-memory profile + password simulation (NOT secure, demonstration only)
 const mockUser = {
   id: 1,
-  username: 'alice',
+  username: 'Alec',
   email: 'alice@example.com',
   displayName: 'Alice',
 };

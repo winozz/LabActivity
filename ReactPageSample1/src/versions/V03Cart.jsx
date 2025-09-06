@@ -13,6 +13,10 @@ export default function V03Cart() {
     });
   }
 
+  function removeFromCart(id) {
+    setCart(prev => prev.filter(i => i.id !== id));
+  }
+
   const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
 
   return (
@@ -40,6 +44,7 @@ export default function V03Cart() {
                 <th style={{borderBottom:'1px solid #e2e8f0', padding:'.25rem .4rem'}}>Item</th>
                 <th style={{borderBottom:'1px solid #e2e8f0', padding:'.25rem .4rem'}}>Qty</th>
                 <th style={{borderBottom:'1px solid #e2e8f0', padding:'.25rem .4rem'}}>Price</th>
+                <th style={{borderBottom:'1px solid #e2e8f0', padding:'.25rem .4rem'}}></th>
               </tr>
             </thead>
             <tbody>
@@ -48,6 +53,9 @@ export default function V03Cart() {
                   <td style={{borderBottom:'1px solid #f1f5f9', padding:'.25rem .4rem'}}>{i.name}</td>
                   <td style={{borderBottom:'1px solid #f1f5f9', padding:'.25rem .4rem'}}>{i.qty}</td>
                   <td style={{borderBottom:'1px solid #f1f5f9', padding:'.25rem .4rem'}}>${(i.price * i.qty).toFixed(2)}</td>
+                  <td style={{borderBottom:'1px solid #f1f5f9', padding:'.25rem .4rem'}}>
+                    <button onClick={() => removeFromCart(i.id)} style={{fontSize:'.55rem', padding:'.2rem .45rem'}}>Remove</button>
+                  </td>
                 </tr>
               ))}
             </tbody>

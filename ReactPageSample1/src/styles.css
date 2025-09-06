@@ -57,3 +57,26 @@ a:hover { text-decoration:underline; }
 .git-legend .dot { width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:.35rem; }
 .git-legend .dot.current { background:#22c55e; box-shadow:0 0 0 3px #1e293b; }
 .git-legend .dot.future { background:#475569; box-shadow:0 0 0 2px #1e293b; }
+.git-sync-demo .sync-status { display:flex; gap:.6rem; flex-wrap:wrap; margin:1.2rem 0 .9rem; }
+.git-sync-demo .status-pill { font-size:.6rem; letter-spacing:.05em; text-transform:uppercase; padding:.4rem .6rem; border-radius:20px; font-weight:600; background:#1e293b; color:#fff; }
+.git-sync-demo .status-pill.ahead { background:#2563eb; }
+.git-sync-demo .status-pill.behind { background:#f59e0b; }
+.git-sync-demo .status-pill.in-sync { background:#16a34a; }
+.git-actions { display:flex; gap:.6rem; flex-wrap:wrap; margin:0 0 1.2rem; }
+.git-actions button { background:#1e293b; color:#fff; border:1px solid #334155; padding:.5rem .8rem; font-size:.65rem; border-radius:6px; cursor:pointer; }
+.git-actions button:hover:not(:disabled) { background:#334155; }
+.git-actions button:disabled { opacity:.4; cursor:not-allowed; }
+.git-stream { position:relative; display:flex; flex-direction:column; gap:.55rem; }
+.commit-row { display:grid; grid-template-columns:20px 30px 30px 1fr; align-items:start; position:relative; }
+.commit-row .connect { position:absolute; left:28px; top:18px; width:2px; bottom:-10px; background:linear-gradient(#334155,#1e293b); opacity:.35; }
+.commit-row:last-child .connect { display:none; }
+.lane { position:relative; height:36px; display:flex; align-items:center; justify-content:center; }
+.dot { width:14px; height:14px; border-radius:50%; box-shadow:0 0 0 3px #0f172a; background:#475569; }
+.dot.present { background:#22c55e; }
+.dot.missing { background:#475569; opacity:.4; }
+.commit-row .meta { display:flex; align-items:center; gap:.6rem; background:#fff; padding:.55rem .75rem; border:1px solid #e2e8f0; border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,.08); font-size:.65rem; min-height:36px; }
+.commit-row .meta .sha { background:#0f172a; color:#fff; padding:.2rem .4rem; border-radius:4px; font-size:.55rem; }
+.commit-row .meta .state { margin-left:auto; font-size:.5rem; text-transform:uppercase; letter-spacing:.07em; padding:.25rem .45rem; border-radius:6px; font-weight:600; }
+.commit-row.local-only .state { background:#2563eb; color:#fff; }
+.commit-row.remote-only .state { background:#f59e0b; color:#1e2937; }
+.commit-row.synced .state { background:#16a34a; color:#fff; }
