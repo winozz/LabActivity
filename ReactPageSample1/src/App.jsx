@@ -16,6 +16,7 @@ import VersionsIndex from './versions/VersionsIndex.jsx';
 import AllInOne from './versions/AllInOne.jsx';
 import GitSyncDemo from '../src/GitSyncDemo.jsx';
 import GitGuide from '../src/GitGuide.jsx';
+import GitOpsPresentation from './GitOpsPresentation';
 import V11AccountMgmt from './versions/V11AccountMgmt.jsx';
 
 function Home() {
@@ -39,6 +40,7 @@ function Home() {
   <Link to="/versions/v1.1">v1.1</Link>
   <Link to="/git-sync">Git Sync Demo</Link>
   <Link to="/git-guide">Git Guide</Link>
+  <Link to="/gitops-keynote">GitOps Presentation</Link>
   <Link to="/versions/all">All-In-One</Link>
       </nav>
     </main>
@@ -66,6 +68,7 @@ export default function App() {
   <Route path="/versions/v1.1" element={<V11AccountMgmt />} />
   <Route path="/git-sync" element={<GitSyncDemo />} />
   <Route path="/git-guide" element={<GitGuide />} />
+  <Route path="/gitops-keynote" element={<GitOpsPresentation />} />
   <Route path="/versions/all" element={<AllInOne />} />
       </Routes>
     </BrowserRouter>
