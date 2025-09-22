@@ -1,5 +1,5 @@
 # Dependencies
-node_modules/
+node_modules/*
 .pnp.cjs
 .pnp.loader.mjs
 .yarn/*
@@ -31,6 +31,10 @@ pnpm-debug.log*
 .eslintcache
 *.tsbuildinfo
 
+# Vite specific
+dist-ssr/
+*.local
+
 # Editor / tooling
 .vscode/
 .idea/
@@ -46,8 +50,11 @@ Thumbs.db
 *.key
 
 # Misc
-*.local
 *.tgz
+
+# React/Vite specific
+.storybook/
+storybook-static/
 
 # Optional: lockfiles (uncomment only if you decide not to commit them)
 # package-lock.json

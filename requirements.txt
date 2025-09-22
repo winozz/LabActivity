@@ -1,0 +1,2 @@
+# Requirements for GitOps Presentation Generator
+python-pptx>=0.6.21
