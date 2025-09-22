@@ -21,82 +21,82 @@ const GitOpsPresentation = () => {
       title: 'Traditional Development Problems',
       subtitle: 'Why We Need Better Processes',
       content: [
-        '❌ Manual deployments prone to human error',
-        '❌ "It works on my machine" syndrome',
-        '❌ Long development cycles',
-        '❌ Difficult rollbacks and recovery',
-        '❌ Poor collaboration between teams',
-        '➡️ Solution: DevOps & Automation'
+        'Manual deployments prone to human error',
+        '"It works on my machine" syndrome',
+        'Long development cycles',
+        'Difficult rollbacks and recovery',
+        'Poor collaboration between teams',
+        'Solution: DevOps & Automation'
       ]
     },
     {
       title: 'What is DevOps?',
       subtitle: 'Development + Operations = DevOps',
       content: [
-        '🤝 Bridge between Development and Operations teams',
-        '🔄 Culture of collaboration and shared responsibility',
-        '🚀 Faster, more reliable software delivery',
-        '📊 Continuous monitoring and feedback',
-        '🔧 Automation of repetitive tasks',
-        '📈 Focus on improving processes continuously'
+        'Bridge between Development and Operations teams',
+        'Culture of collaboration and shared responsibility',
+        'Faster, more reliable software delivery',
+        'Continuous monitoring and feedback',
+        'Automation of repetitive tasks',
+        'Focus on improving processes continuously'
       ]
     },
     {
       title: 'Version Control with Git',
       subtitle: 'The Foundation of Modern Development',
       content: [
-        '📁 Track every change in your code',
-        '🌿 Branching: Work on features in isolation',
-        '🔀 Merging: Combine changes safely',
-        '👥 Collaboration: Multiple developers, one codebase',
-        '⏰ History: See what changed, when, and by whom',
-        '🔄 Distributed: Every copy is a full backup'
+        'Track every change in your code',
+        'Branching: Work on features in isolation',
+        'Merging: Combine changes safely',
+        'Collaboration: Multiple developers, one codebase',
+        'History: See what changed, when, and by whom',
+        'Distributed: Every copy is a full backup'
       ]
     },
     {
       title: 'Continuous Integration (CI)',
       subtitle: 'Automating Code Quality',
       content: [
-        '🔄 Automatically test every code change',
-        '✅ Run tests, linting, and security scans',
-        '🚨 Catch bugs before they reach production',
-        '📊 Generate test reports and coverage metrics',
-        '🏗️ Build applications automatically',
-        '💡 Fast feedback for developers'
+        'Automatically test every code change',
+        'Run tests, linting, and security scans',
+        'Catch bugs before they reach production',
+        'Generate test reports and coverage metrics',
+        'Build applications automatically',
+        'Fast feedback for developers'
       ]
     },
     {
       title: 'Continuous Deployment (CD)',
       subtitle: 'Automating Software Delivery',
       content: [
-        '🚀 Automatically deploy tested code',
-        '🎯 Deploy to different environments (dev, staging, prod)',
-        '🔄 Rolling updates with zero downtime',
-        '🛡️ Automated rollback if issues detected',
-        '📈 Faster time to market',
-        '🎮 Blue-green and canary deployments'
+        'Automatically deploy tested code',
+        'Deploy to different environments (dev, staging, prod)',
+        'Rolling updates with zero downtime',
+        'Automated rollback if issues detected',
+        'Faster time to market',
+        'Blue-green and canary deployments'
       ]
     },
     {
       title: 'What is GitOps?',
       subtitle: 'Git as the Single Source of Truth',
       content: [
-        '📚 All infrastructure and app configs in Git',
-        '🎯 Declarative: Describe what you want, not how',
-        '🤖 Automated: Changes trigger deployments',
-        '🔍 Observable: See the current state clearly',
-        '🔙 Reversible: Easy rollbacks via Git',
-        '🏛️ Used by major tech companies worldwide'
+        'All infrastructure and app configs in Git',
+        'Declarative: Describe what you want, not how',
+        'Automated: Changes trigger deployments',
+        'Observable: See the current state clearly',
+        'Reversible: Easy rollbacks via Git',
+        'Used by major tech companies worldwide'
       ]
     },
     {
       title: 'GitOps Core Principles',
       subtitle: 'The Four Pillars',
       content: [
-        '1️⃣ Declarative Configuration',
-        '2️⃣ Version Controlled (Git)',
-        '3️⃣ Automatically Applied',
-        '4️⃣ Continuously Monitored',
+        '1. Declarative Configuration',
+        '2. Version Controlled (Git)',
+        '3. Automatically Applied',
+        '4. Continuously Monitored',
         '',
         'These principles ensure reliable, auditable deployments'
       ]
@@ -105,36 +105,36 @@ const GitOpsPresentation = () => {
       title: 'Popular DevOps Tools',
       subtitle: 'Tools You Should Know About',
       content: [
-        '🐙 GitHub Actions - CI/CD workflows',
-        '🦊 GitLab CI - Integrated DevOps platform',
-        '🔵 Azure DevOps - Microsoft ecosystem',
-        '🏗️ Jenkins - Open-source automation',
-        '📦 Docker - Containerization',
-        '☸️ Kubernetes - Container orchestration'
+        'GitHub Actions - CI/CD workflows',
+        'GitLab CI - Integrated DevOps platform',
+        'Azure DevOps - Microsoft ecosystem',
+        'Jenkins - Open-source automation',
+        'Docker - Containerization',
+        'Kubernetes - Container orchestration'
       ]
     },
     {
       title: 'Real-World Example: E-commerce Site',
       subtitle: 'From Code to Customer',
       content: [
-        '👩‍💻 Developer commits bug fix to Git',
-        '🔄 CI runs: tests pass, build succeeds',
-        '🧪 Auto-deploy to staging environment',
-        '✅ QA team reviews and approves',
-        '🚀 Auto-deploy to production',
-        '📊 Monitor performance and user experience'
+        'Developer commits bug fix to Git',
+        'CI runs: tests pass, build succeeds',
+        'Auto-deploy to staging environment',
+        'QA team reviews and approves',
+        'Auto-deploy to production',
+        'Monitor performance and user experience'
       ]
     },
     {
       title: 'Student Benefits',
       subtitle: 'Why This Matters for Your Career',
       content: [
-        '💼 High demand for DevOps skills in industry',
-        '🏆 Build professional-quality projects',
-        '🤝 Understand how teams collaborate',
-        '🔧 Automate tedious tasks',
-        '📚 Foundation for cloud and infrastructure',
-        '🚀 Stand out in job applications'
+        'High demand for DevOps skills in industry',
+        'Build professional-quality projects',
+        'Understand how teams collaborate',
+        'Automate tedious tasks',
+        'Foundation for cloud and infrastructure',
+        'Stand out in job applications'
       ]
     },
     {
