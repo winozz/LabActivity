@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import PresenterNotes from '../../components/PresenterNotes.jsx';
 
 const JavaScriptEssentials = () => {
   const [activeSection, setActiveSection] = useState('destructuring');
@@ -817,8 +818,38 @@ function UserListApp() {
           </Link>
         </div>
       </div>
+      
+      <PresenterNotes 
+        notes={jsEssentialsNotes} 
+        lessonTitle="JavaScript Essentials for React" 
+      />
     </div>
   );
 };
+
+// Presenter notes for JavaScript Essentials
+const jsEssentialsNotes = [
+  {
+    section: "Modern JavaScript Prerequisites",
+    duration: "5 minutes",
+    keyPoints: [
+      "React relies heavily on modern JavaScript features",
+      "ES6+ features are essential for React development", 
+      "Understanding these concepts before React saves confusion later"
+    ],
+    script: `Before diving deeper into React, we need to ensure you're comfortable with the modern JavaScript features that React uses extensively. These aren't React-specific concepts, but they're so commonly used in React that they feel like part of the framework itself.`
+  },
+  {
+    section: "Destructuring Assignment",
+    duration: "8-10 minutes",
+    keyPoints: [
+      "Extract values from arrays and objects",
+      "Commonly used for props and state",
+      "Makes code cleaner and more readable"
+    ],
+    script: `Destructuring is probably the most important modern JavaScript feature for React development. You'll see it everywhere - in component props, state management, and API responses. It allows us to extract values from objects and arrays in a clean, readable way.`
+  }
+  // Add more sections as needed...
+];
 
 export default JavaScriptEssentials;

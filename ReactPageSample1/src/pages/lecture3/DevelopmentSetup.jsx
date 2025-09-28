@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import PresenterNotes from '../../components/PresenterNotes.jsx';
 
 const DevelopmentSetup = () => {
   const [activeTab, setActiveTab] = useState('nodejs');
@@ -944,8 +945,279 @@ npm install --save-dev vite @vitejs/plugin-react
           </Link>
         </div>
       </div>
+      
+      <PresenterNotes 
+        notes={developmentSetupNotes} 
+        lessonTitle="Development Setup" 
+      />
     </div>
   );
 };
+
+// Comprehensive presenter notes for Development Setup
+const developmentSetupNotes = [
+  {
+    section: "Node.js & npm Setup",
+    duration: "8-10 minutes",
+    keyPoints: [
+      "Node.js is the JavaScript runtime that enables JavaScript outside the browser",
+      "npm (Node Package Manager) comes bundled with Node.js",
+      "LTS (Long Term Support) version is recommended for stability",
+      "Version checking is crucial for troubleshooting"
+    ],
+    script: `Let's start by setting up our development environment. The first thing we need is Node.js.
+
+Now, you might be wondering - 'We're building web applications that run in the browser, so why do we need Node.js?' Great question! Node.js serves two main purposes for React development:
+
+First, it provides us with npm - the Node Package Manager. This is how we'll install React and all the other packages our project needs. Think of npm as an app store for JavaScript packages. Instead of downloading and managing libraries manually, npm handles all of this for us.
+
+Second, modern React development uses build tools that process our code - they convert JSX to JavaScript, bundle our files together, optimize our code, and more. These build tools run on Node.js.
+
+When downloading Node.js, always choose the LTS version - that stands for Long Term Support. The LTS version is more stable and is what most companies use in production. The 'Current' version has the latest features but might have bugs.
+
+After installation, we'll verify everything works by checking the versions. This is important because version numbers help us troubleshoot issues later. If something doesn't work, the first question developers ask is 'What version are you using?'`,
+    interactions: [
+      {
+        type: "Live Demo",
+        description: "Show students the Node.js download page and demonstrate the installation process"
+      },
+      {
+        type: "Hands-on Practice",
+        description: "Have students download and install Node.js, then verify their installation by checking versions in terminal"
+      }
+    ],
+    commonQuestions: [
+      {
+        question: "What if I already have an older version of Node.js installed?",
+        answer: "You can update to the latest LTS version. If you have version conflicts between projects, consider using a version manager like nvm (Node Version Manager) to switch between Node.js versions easily."
+      },
+      {
+        question: "Do I need to learn Node.js to use React?",
+        answer: "Not really! You're using Node.js as a tool, not building server applications with it. You just need to know basic terminal commands to run npm commands."
+      }
+    ]
+  },
+  {
+    section: "Code Editor Setup",
+    duration: "6-8 minutes",
+    keyPoints: [
+      "VS Code is the most popular editor for React development",
+      "Extensions significantly improve the development experience",
+      "Proper configuration saves time and prevents errors",
+      "Prettier and ESLint help maintain code quality"
+    ],
+    script: `A good code editor is essential for productive React development, and VS Code has become the gold standard.
+
+Why VS Code? It's free, fast, has excellent JavaScript and React support out of the box, and has the largest ecosystem of extensions. Most React developers use it, which means better community support and resources.
+
+But VS Code by itself is just the beginning. The real magic happens when you add the right extensions. Let me walk you through the essential ones:
+
+'ES7+ React/Redux/React-Native snippets' gives you shortcuts for creating components quickly. Instead of typing out entire component structures, you can type 'rafce' and get a complete functional component.
+
+'Auto Rename Tag' automatically renames both opening and closing JSX tags when you edit one - this prevents so many bugs!
+
+'Prettier' automatically formats your code consistently. No more arguments about spacing, indentation, or semicolons - Prettier handles it all.
+
+And 'ESLint' catches potential errors and enforces coding standards before you even run your code.
+
+The configuration I'm showing you makes VS Code format your code automatically when you save, and fixes ESLint issues automatically. This means cleaner code with less effort.`,
+    interactions: [
+      {
+        type: "Live Demo",
+        description: "Show installing extensions and demonstrate how each one works with real code examples"
+      },
+      {
+        type: "Configuration Exercise",
+        description: "Help students set up their VS Code settings.json file together"
+      }
+    ],
+    commonQuestions: [
+      {
+        question: "Can I use other editors like Sublime Text or Atom?",
+        answer: "Yes, but you'll miss out on many React-specific features and the community support. VS Code's React ecosystem is unmatched, making development much smoother."
+      },
+      {
+        question: "Are all these extensions necessary?",
+        answer: "Not strictly necessary, but they dramatically improve your development experience and help prevent common mistakes. Think of them as power tools that make you more efficient."
+      }
+    ]
+  },
+  {
+    section: "Create React App (Legacy Approach)",
+    duration: "12-15 minutes",
+    keyPoints: [
+      "CRA was the standard way to start React projects",
+      "It's now in maintenance mode and no longer recommended",
+      "Understanding its limitations helps explain why we've moved to Vite",
+      "Still useful to understand for legacy codebases"
+    ],
+    script: `Now we need to talk about Create React App - and this is where things get interesting. CRA was the official, recommended way to start React projects for many years, but things have changed dramatically.
+
+Create React App was Facebook's answer to the complexity of setting up a React project. Before CRA, you had to configure Webpack, Babel, and many other tools manually - it was overwhelming for beginners. CRA solved this by providing a zero-configuration setup that just worked.
+
+But here's the crucial thing to understand: Create React App is now legacy technology. Facebook has officially stepped back from maintaining it and no longer recommends it for new projects. Why? Several reasons:
+
+First, performance. As your application grows, CRA becomes painfully slow. Development server startup times can reach 30+ seconds for larger projects, and hot reloading (seeing your changes instantly) becomes sluggish.
+
+Second, bundle sizes. CRA produces larger final bundles, which means slower loading times for your users.
+
+Third, it's hard to customize. If you want to modify the build configuration, you have to 'eject' from CRA, which exposes all the complex configuration and you can never go back.
+
+Finally, it uses outdated tooling. The JavaScript ecosystem moves fast, and CRA got left behind.
+
+I'm showing you this because you'll still encounter CRA in existing codebases and tutorials, so you need to recognize it. But for new projects, we'll use modern alternatives.`,
+    interactions: [
+      {
+        type: "Timeline Discussion",
+        description: "Show the evolution from manual setup → CRA → modern tools, explaining how developer needs changed"
+      },
+      {
+        type: "Legacy Code Example",
+        description: "Show a CRA project structure so students can recognize it in existing codebases"
+      }
+    ],
+    commonQuestions: [
+      {
+        question: "Should I learn CRA if it's legacy?",
+        answer: "Understanding CRA is useful for maintaining existing projects and understanding React's history, but don't spend too much time on it. Focus on modern tools like Vite."
+      },
+      {
+        question: "What if I find a tutorial that uses CRA?",
+        answer: "You can usually follow along by creating a Vite project instead. The React code will be the same; only the setup is different."
+      }
+    ]
+  },
+  {
+    section: "Vite - The Modern Solution",
+    duration: "15-18 minutes",
+    keyPoints: [
+      "Vite is the new standard for React development",
+      "Lightning-fast development server and build times",
+      "Better developer experience with instant hot reloading",
+      "Smaller bundle sizes and modern tooling"
+    ],
+    script: `Now let's talk about Vite - pronounced 'veet' (French for 'fast') - which has become the new standard for React development.
+
+Vite represents a fundamental shift in how we think about build tools. While CRA bundled everything upfront, Vite uses a completely different approach called 'unbundled development.'
+
+Here's the key insight: during development, Vite doesn't bundle your code at all. Instead, it serves your modules individually using the browser's native ES modules support. This means development server startup is incredibly fast - under 200 milliseconds regardless of project size.
+
+When you change a file, Vite only updates that specific module, not the entire bundle. This makes hot module replacement (HMR) essentially instantaneous. You'll see your changes appear in the browser faster than you can move your mouse from your editor to your browser window.
+
+For production builds, Vite uses Rollup, which produces smaller, more optimized bundles than CRA's Webpack configuration. This means better performance for your users.
+
+The developer experience improvements are dramatic. You'll spend less time waiting and more time coding. The instant feedback loop helps you iterate faster and catch mistakes immediately.
+
+Vite is also more modern by default. It supports TypeScript out of the box, has built-in CSS preprocessing support, and works with the latest JavaScript features without additional configuration.
+
+The React team now recommends using frameworks like Next.js or Remix, but for learning React fundamentals, Vite is perfect. It gives you a modern development experience without the complexity of a full framework.`,
+    interactions: [
+      {
+        type: "Performance Comparison",
+        description: "Show side-by-side startup times: CRA vs Vite, demonstrate HMR speed difference"
+      },
+      {
+        type: "Live Setup",
+        description: "Create a new Vite project together, showing the entire process from command to running application"
+      }
+    ],
+    commonQuestions: [
+      {
+        question: "Is Vite as stable as CRA?",
+        answer: "Yes! Vite is production-ready and used by many large companies. It's actively maintained and has a growing ecosystem. The performance benefits far outweigh any concerns about stability."
+      },
+      {
+        question: "Can I migrate an existing CRA project to Vite?",
+        answer: "Yes, but it requires some configuration changes. For learning purposes, it's easier to start fresh with Vite. For production projects, there are migration guides available."
+      }
+    ]
+  },
+  {
+    section: "Project Structure & Development Workflow",
+    duration: "8-10 minutes",
+    keyPoints: [
+      "Understanding the generated project structure",
+      "Key files and their purposes",
+      "Development vs production workflows",
+      "Hot module replacement in action"
+    ],
+    script: `Let's explore the project structure Vite creates and understand what each part does.
+
+The beauty of Vite's structure is its simplicity. Notice that index.html is in the root directory, not in a public folder like CRA. This is because Vite treats your index.html as the entry point and builds from there.
+
+The src folder contains your application code. main.jsx is your entry point - this is where React gets mounted to the DOM. Compare this to CRA's index.js - same concept, just cleaner naming.
+
+One thing you'll notice is that Vite uses .jsx extensions by default. This is actually more semantically correct - JSX files should have .jsx extensions to clearly indicate they contain JSX syntax.
+
+The development workflow is straightforward: npm run dev starts the development server with hot reloading. When you save changes, they appear instantly in your browser. npm run build creates an optimized production bundle.
+
+What's really impressive is how fast this all is. With Vite, you'll find yourself in a much tighter feedback loop - make a change, see it immediately, iterate quickly. This dramatically improves the development experience and helps you learn faster because you can experiment without waiting.
+
+The hot module replacement preserves your component state when possible, so you don't lose your place when making changes. If you're filling out a form or testing a specific interaction, your progress is often preserved when you update the code.`,
+    interactions: [
+      {
+        type: "File Exploration",
+        description: "Walk through each file in the generated project, explaining its purpose and showing the code"
+      },
+      {
+        type: "Live Development Demo",
+        description: "Make some changes to the default App component and show instant updates in the browser"
+      }
+    ],
+    commonQuestions: [
+      {
+        question: "Why is index.html in the root instead of public?",
+        answer: "Vite treats index.html as the entry point and processes it during build. This allows for more flexible configuration and better integration with the build process."
+      },
+      {
+        question: "What's the difference between .js and .jsx files?",
+        answer: "Functionally, they're the same in React projects. But .jsx is more descriptive - it clearly indicates the file contains JSX. Some tools and linters work better with the correct extension."
+      }
+    ]
+  },
+  {
+    section: "Next Steps & Best Practices",
+    duration: "5-7 minutes",
+    keyPoints: [
+      "Development environment is just the beginning",
+      "Importance of keeping tools updated",
+      "Learning path progression",
+      "Common setup mistakes to avoid"
+    ],
+    script: `Now that we have our development environment set up, let's talk about next steps and some important best practices.
+
+First, remember that this setup is just the foundation. As you progress, you'll add more tools - testing libraries, routing solutions, state management, UI component libraries. But starting with this solid foundation makes everything else easier.
+
+Keep your tools updated regularly. The JavaScript ecosystem moves fast, and newer versions often include performance improvements and bug fixes. Check for Node.js updates monthly and npm package updates weekly for active projects.
+
+Don't get overwhelmed by all the tooling options out there. Start simple - Vite, VS Code with essential extensions, and focus on learning React itself. You can always add more sophisticated tools later as your needs grow.
+
+One common mistake beginners make is spending too much time configuring their environment instead of learning React. The setup I've shown you will serve you well for months of learning. Resist the urge to endlessly tweak your configuration.
+
+Another mistake is not learning the terminal/command line basics. You don't need to be an expert, but being comfortable with basic commands like cd, ls, and running npm commands will make your development life much easier.
+
+Finally, embrace the fast feedback loop that modern tooling provides. The instant updates and quick development server make experimentation easy. Use this to your advantage - try things, break things, and learn by doing. That's the best way to master React.`,
+    interactions: [
+      {
+        type: "Best Practices Discussion",
+        description: "Share personal experiences about what works and what to avoid in development environment setup"
+      },
+      {
+        type: "Q&A Session",
+        description: "Address any remaining questions about the development environment before moving to the next topic"
+      }
+    ],
+    commonQuestions: [
+      {
+        question: "How often should I update my dependencies?",
+        answer: "For learning projects, don't worry about it much. For real projects, check for updates weekly and update monthly, testing thoroughly. Always read release notes for breaking changes."
+      },
+      {
+        question: "What if I want to use a different package manager like Yarn?",
+        answer: "Yarn works great with React! The commands are similar (yarn instead of npm install, yarn dev instead of npm run dev). Choose one and stick with it for consistency."
+      }
+    ]
+  }
+];
 
 export default DevelopmentSetup;

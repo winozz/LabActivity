@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import PresenterNotes from '../../components/PresenterNotes.jsx';
 
 const PureReact = () => {
   const [activeExample, setActiveExample] = useState('hello-world');
@@ -716,8 +717,127 @@ const PureReact = () => {
           </Link>
         </div>
       </div>
+      
+      <PresenterNotes 
+        notes={pureReactNotes} 
+        lessonTitle="Pure React" 
+      />
     </div>
   );
 };
+
+// Presenter notes for Pure React
+const pureReactNotes = [
+  {
+    section: "Introduction to Pure React",
+    duration: "5-7 minutes",
+    keyPoints: [
+      "Pure React means using React without build tools",
+      "Great for understanding React fundamentals",
+      "Uses CDN links instead of npm packages",
+      "Perfect for learning and prototyping"
+    ],
+    script: `Welcome to Pure React! Before we dive into modern development environments, it's important to understand React at its core, without any build tools or complexity.
+
+Pure React means using React directly in the browser with just HTML, CSS, and JavaScript. No webpack, no babel, no build process - just React itself. This approach helps you understand exactly what React does and how it works.
+
+We're going to explore four different examples, starting from the simplest 'Hello World' and building up to more complex interactions. Each example is complete HTML that you can save and open directly in your browser.
+
+This approach is excellent for learning because there's no setup complexity, no hidden magic - just React doing what React does best: building user interfaces.`
+  },
+  {
+    section: "Hello World Example",
+    duration: "8-10 minutes",
+    keyPoints: [
+      "CDN links for React and ReactDOM",
+      "Babel transformer for JSX",
+      "Basic component structure",
+      "ReactDOM.render() method"
+    ],
+    script: `Let's start with the classic 'Hello World' example. This shows the absolute minimum needed to get React running.
+
+Notice we're including three CDN links: React itself, ReactDOM for rendering to the DOM, and Babel for transforming JSX. In modern development, build tools handle this transformation, but here we can see it happening live in the browser.
+
+The component is just a function that returns JSX. JSX looks like HTML but it's actually JavaScript that gets transformed into React.createElement calls. When you write <h1>Hello, World!</h1>, Babel transforms this into React.createElement('h1', null, 'Hello, World!').
+
+Finally, ReactDOM.render() takes our component and mounts it to a DOM element. This is where React takes control of that part of your webpage.`
+  },
+  {
+    section: "Counter Example",
+    duration: "10-12 minutes", 
+    keyPoints: [
+      "useState hook for state management",
+      "Event handlers in React",
+      "State updates trigger re-renders",
+      "Functional components vs class components"
+    ],
+    script: `The counter example introduces state - the heart of interactive React applications.
+
+The useState hook gives us a state variable (count) and a function to update it (setCount). When we call setCount, React knows the component needs to re-render with the new value.
+
+Notice the event handler: onClick={increment}. We're passing a function reference, not calling the function. React will call this function when the button is clicked.
+
+This demonstrates React's core principle: when state changes, the UI automatically updates. You don't manually update the DOM - you just update your state, and React handles the rest.
+
+The beauty of this approach is predictability. Your UI is always a function of your current state. If you know the state, you know exactly how the UI will look.`
+  },
+  {
+    section: "Todo List Example",
+    duration: "12-15 minutes",
+    keyPoints: [
+      "Managing arrays in state",
+      "Form handling in React",
+      "List rendering with keys",
+      "Multiple state variables"
+    ],
+    script: `The todo list example shows more realistic state management with arrays and forms.
+
+We have two pieces of state: the input value and the todos array. Managing form input in React follows a pattern called 'controlled components' - the input's value is controlled by React state, not the DOM.
+
+When adding a todo, we use the spread operator to create a new array rather than mutating the existing one. This is crucial in React - state should be treated as immutable. React uses object reference equality to determine if it needs to re-render, so we always create new objects/arrays.
+
+The key prop on each todo item is important for performance. React uses keys to efficiently update lists when items are added, removed, or reordered. Never use array indices as keys for dynamic lists - use unique, stable identifiers.
+
+This example shows how React scales from simple interactions to more complex data management while maintaining the same principles.`
+  },
+  {
+    section: "User Profile Example",
+    duration: "10-12 minutes",
+    keyPoints: [
+      "Object state management",
+      "Conditional rendering",
+      "Input binding patterns",
+      "State structure best practices"
+    ],
+    script: `Our final example demonstrates working with object state and conditional rendering.
+
+The user profile shows how to manage state that's an object rather than primitive values. When updating object state, we need to create a new object, which we do using the spread operator: {...user, name: newName}.
+
+Conditional rendering uses JavaScript's logical operators. The user.name && <h2>Welcome, {user.name}!</h2> pattern only renders the welcome message if the user has a name.
+
+The edit mode toggle demonstrates how React can completely change what's rendered based on state. Same component, same data, but entirely different UI based on the isEditing flag.
+
+This pattern of conditional rendering is everywhere in React applications - showing loading states, authenticated vs unauthenticated views, different layouts based on user permissions, and much more.`
+  },
+  {
+    section: "Transitioning to Modern Development",
+    duration: "5-7 minutes",
+    keyPoints: [
+      "Pure React vs modern tooling trade-offs",
+      "When to use each approach",
+      "Next steps in React learning",
+      "Build tools benefits"
+    ],
+    script: `Pure React is fantastic for learning and simple prototypes, but real applications need more sophisticated tooling.
+
+Build tools give us hot reloading, optimized bundles, TypeScript support, CSS preprocessing, and much more. They also handle the JSX transformation automatically, so we don't need to include Babel in the browser.
+
+However, understanding Pure React gives you a solid foundation. When something goes wrong with your build process, or when you need to debug a complex React issue, knowing how React works at its core is invaluable.
+
+The concepts you've learned here - components, state, event handling, conditional rendering - are exactly the same whether you're using Pure React or a modern build setup. The tools change, but React's core principles remain constant.
+
+Now that you understand React fundamentals, you're ready to explore modern development environments and more advanced React features.`
+  }
+];
 
 export default PureReact;
