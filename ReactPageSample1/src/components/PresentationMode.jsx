@@ -398,7 +398,7 @@ const PresentationMode = ({
                 {presenterNotes[currentSlide].script && (
                   <div>
                     <h4 style={{ color: '#60a5fa', margin: '0 0 0.5rem 0' }}>
-                      Script:
+                      Note:
                     </h4>
                     <div style={{ 
                       color: '#d1d5db', 

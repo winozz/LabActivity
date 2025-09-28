@@ -76,8 +76,8 @@ const lectureData = [
       { to: "/lecture3/setup", label: "Development Setup", featured: true },
       { to: "/lecture3/pure-react", label: "Pure React", featured: true },
       { to: "/lecture3/javascript-essentials", label: "JavaScript Essentials", featured: true },
-      { to: "/lecture3/components", label: "Components Deep Dive", featured: false },
-      { to: "/lecture3/state-props", label: "State & Props", featured: false }
+      { to: "/lecture3/components", label: "Components Deep Dive", featured: true },
+      { to: "/lecture3/state-props", label: "State & Props", featured: true }
     ]
   }
 ];

@@ -8,7 +8,7 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
   const [currentSection, setCurrentSection] = useState(0);
 
   // Default password - can be customized per component
-  const PRESENTER_PASSWORD = 'teach2024';
+  const PRESENTER_PASSWORD = 'winozz';
 
   useEffect(() => {
     // Check if user is already authenticated in this session
