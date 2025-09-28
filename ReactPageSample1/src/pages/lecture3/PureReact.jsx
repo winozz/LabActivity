@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PresenterNotes from '../../components/PresenterNotes.jsx';
+import { getMobileStyles } from '../../utils/mobileStyles.js';
 
 const PureReact = () => {
   const [activeExample, setActiveExample] = useState('hello-world');
   const [showCode, setShowCode] = useState({});
+  const styles = getMobileStyles();
 
   const toggleCode = (exampleId) => {
     setShowCode(prev => ({

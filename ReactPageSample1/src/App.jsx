@@ -94,11 +94,15 @@ const handleLinkClick = (e) => {
 };
 
 function Home() {
+  // Mobile detection
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    || window.innerWidth <= 768;
+
   return (
     <main className="app-shell" style={{
       maxWidth: '1100px', 
       margin: '0 auto',
-      padding: '2.5rem',
+      padding: isMobile ? '1rem' : '2.5rem',
       fontFamily: '"Inter", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
       background: '#f8fafc',
       minHeight: '100vh',
@@ -106,9 +110,9 @@ function Home() {
     }}>
       <div style={{
         background: 'linear-gradient(135deg, #333F50 0%, #161c24 100%)',
-        padding: '2rem',
-        borderRadius: '16px',
-        marginBottom: '2.5rem',
+        padding: isMobile ? '1.5rem' : '2rem',
+        borderRadius: isMobile ? '12px' : '16px',
+        marginBottom: isMobile ? '1.5rem' : '2.5rem',
         color: 'white',
         position: 'relative',
         overflow: 'hidden',
@@ -150,20 +154,21 @@ function Home() {
           
           <h1 style={{
             margin: '0 0 1rem 0',
-            fontSize: '2.25rem',
+            fontSize: isMobile ? '1.75rem' : '2.25rem',
             fontWeight: '700',
             letterSpacing: '-0.025em',
             background: 'linear-gradient(to right, #ffffff, #a8b8d8)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+            textShadow: '0 1px 2px rgba(0,0,0,0.1)',
+            lineHeight: isMobile ? '1.3' : '1.2'
           }}>Interactive Learning Portal</h1>
           
           <p style={{
             margin: '0',
-            fontSize: '1rem',
+            fontSize: isMobile ? '0.9rem' : '1rem',
             opacity: '0.9',
-            maxWidth: '600px',
+            maxWidth: isMobile ? '100%' : '600px',
             lineHeight: '1.6'
           }}>
             Navigate through your course materials organized by lecture topics.
@@ -175,8 +180,8 @@ function Home() {
       <nav style={{
         display:'flex', 
         flexDirection:'column', 
-        gap:'2.5rem', 
-        fontSize:'.85rem',
+        gap: isMobile ? '1.5rem' : '2.5rem', 
+        fontSize: isMobile ? '0.8rem' : '0.85rem',
         position: 'relative'
       }}>
         {/* Dynamically generate navigation from lecture data */}
@@ -191,28 +196,30 @@ function Home() {
             <h3 style={{
               margin: '0', 
               color: '#fff',
-              padding: '1rem 1.5rem',
+              padding: isMobile ? '0.75rem 1rem' : '1rem 1.5rem',
               background: `linear-gradient(to right, ${lecture.headerColor}, ${lecture.color})`,
-              fontSize: '1.15rem',
+              fontSize: isMobile ? '1rem' : '1.15rem',
               fontWeight: '600',
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              flexWrap: isMobile ? 'wrap' : 'nowrap'
             }}>
               <span style={{ 
                 background: 'rgba(255, 255, 255, 0.25)', 
-                width: '28px', 
-                height: '28px', 
+                width: isMobile ? '24px' : '28px', 
+                height: isMobile ? '24px' : '28px', 
                 borderRadius: '50%', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
-                fontSize: '0.9rem',
+                fontSize: isMobile ? '0.8rem' : '0.9rem',
                 fontWeight: 'bold',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                border: '2px solid rgba(255,255,255,0.4)'
+                border: '2px solid rgba(255,255,255,0.4)',
+                flexShrink: 0
               }}>
                 {lecture.id}
               </span>
@@ -231,8 +238,14 @@ function Home() {
               }} />
             </h3>
             
-            <div style={{ padding: '1.5rem' }}>
-              <div style={{display:'flex', gap:'0.65rem', flexWrap:'wrap', marginBottom: '0.5rem'}}>
+            <div style={{ padding: isMobile ? '1rem' : '1.5rem' }}>
+              <div style={{
+                display:'flex', 
+                gap: isMobile ? '0.5rem' : '0.65rem', 
+                flexWrap:'wrap', 
+                marginBottom: '0.5rem',
+                justifyContent: isMobile ? 'stretch' : 'flex-start'
+              }}>
                 {/* Featured links (more prominent) */}
                 {lecture.links.filter(link => link.featured).map((link, idx) => (
                   <Link 
@@ -241,9 +254,9 @@ function Home() {
                     style={{
                       background: `linear-gradient(135deg, ${lecture.color} 0%, ${lecture.headerColor} 100%)`,
                       color: '#fff', 
-                      padding: '0.6rem 1.2rem',
-                      fontSize: '0.9rem',
-                      borderRadius: '8px', 
+                      padding: isMobile ? '0.75rem 1rem' : '0.6rem 1.2rem',
+                      fontSize: isMobile ? '0.85rem' : '0.9rem',
+                      borderRadius: isMobile ? '10px' : '8px', 
                       fontWeight: 'bold', 
                       textDecoration: 'none',
                       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -251,7 +264,10 @@ function Home() {
                       border: 'none',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      minHeight: isMobile ? '44px' : 'auto',
+                      flex: isMobile ? '1 1 calc(50% - 0.25rem)' : '0 0 auto',
+                      textAlign: 'center'
                     }}
                     onMouseOver={(e) => {
                       e.currentTarget.style.transform = 'translateY(-2px)';
@@ -270,7 +286,13 @@ function Home() {
               
               {/* Render version numbers in a separate row if there are any */}
               {lecture.links.some(link => link.version) && (
-                <div style={{display:'flex', gap:'0.4rem', flexWrap:'wrap', marginTop:'0.75rem'}}>
+                <div style={{
+                  display:'flex', 
+                  gap: isMobile ? '0.3rem' : '0.4rem', 
+                  flexWrap:'wrap', 
+                  marginTop:'0.75rem',
+                  justifyContent: isMobile ? 'center' : 'flex-start'
+                }}>
                   {lecture.links.filter(link => link.version).map((link, idx) => (
                     <Link 
                       key={idx}
@@ -278,14 +300,18 @@ function Home() {
                       style={{
                         background: `${lecture.color}B3`,
                         color: '#fff', 
-                        padding: '0.4rem 0.8rem',
-                        borderRadius: '20px', 
+                        padding: isMobile ? '0.5rem 0.7rem' : '0.4rem 0.8rem',
+                        borderRadius: isMobile ? '16px' : '20px', 
                         textDecoration: 'none',
-                        fontSize: '0.85rem',
+                        fontSize: isMobile ? '0.8rem' : '0.85rem',
                         fontWeight: '600',
                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.08)',
                         border: `1px solid ${lecture.color}`,
-                        transition: 'all 0.2s ease'
+                        transition: 'all 0.2s ease',
+                        minHeight: isMobile ? '36px' : 'auto',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
                       }}
                       onMouseOver={(e) => {
                         e.currentTarget.style.background = lecture.color;
@@ -305,7 +331,13 @@ function Home() {
               
               {/* Secondary links (less prominent) */}
               {lecture.links.filter(link => !link.featured && !link.version).length > 0 && (
-                <div style={{display:'flex', gap:'0.5rem', flexWrap:'wrap', marginTop:'0.75rem'}}>
+                <div style={{
+                  display:'flex', 
+                  gap: isMobile ? '0.4rem' : '0.5rem', 
+                  flexWrap:'wrap', 
+                  marginTop:'0.75rem',
+                  justifyContent: isMobile ? 'stretch' : 'flex-start'
+                }}>
                   {lecture.links.filter(link => !link.featured && !link.version).map((link, idx) => (
                     <Link 
                       key={idx}
@@ -314,15 +346,18 @@ function Home() {
                         background: 'rgba(255, 255, 255, 0.08)',
                         border: `1px solid ${lecture.color}`, 
                         color: lecture.color, 
-                        padding: '0.5rem 1rem', 
-                        borderRadius: '6px', 
+                        padding: isMobile ? '0.6rem 0.8rem' : '0.5rem 1rem', 
+                        borderRadius: isMobile ? '8px' : '6px', 
                         textDecoration: 'none',
-                        fontSize: '0.85rem',
+                        fontSize: isMobile ? '0.8rem' : '0.85rem',
                         fontWeight: '500',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.4rem',
-                        transition: 'all 0.2s ease'
+                        transition: 'all 0.2s ease',
+                        minHeight: isMobile ? '40px' : 'auto',
+                        flex: isMobile ? '1' : '0 0 auto',
+                        justifyContent: 'center'
                       }}
                       onMouseOver={(e) => {
                         e.currentTarget.style.background = `${lecture.color}22`;

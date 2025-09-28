@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PresenterNotes from '../../components/PresenterNotes.jsx';
+import { getMobileStyles } from '../../utils/mobileStyles.js';
 
 const DevelopmentSetup = () => {
   const [activeTab, setActiveTab] = useState('nodejs');
   const [checkedItems, setCheckedItems] = useState({});
+  const styles = getMobileStyles();
 
   const toggleCheck = (itemId) => {
     setCheckedItems(prev => ({

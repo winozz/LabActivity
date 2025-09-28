@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PresenterNotes from '../../components/PresenterNotes.jsx';
 import PresentationMode from '../../components/PresentationMode.jsx';
+import { getMobileStyles } from '../../utils/mobileStyles.js';
 
 const StateAndProps = () => {
+  const styles = getMobileStyles();
   const presenterNotes = [
     {
       title: "🎯 State & Props Foundation",

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PresenterNotes from '../../components/PresenterNotes.jsx';
+import { getMobileStyles } from '../../utils/mobileStyles.js';
 
 const JavaScriptEssentials = () => {
   const [activeSection, setActiveSection] = useState('destructuring');
   const [showOutput, setShowOutput] = useState({});
+  const styles = getMobileStyles();
 
   const toggleOutput = (sectionId) => {
     setShowOutput(prev => ({
@@ -497,21 +499,13 @@ function UserGreeting({ user }) {
 
   return (
     <div style={{ 
-      minHeight: '100vh', 
-      background: 'linear-gradient(135deg, #20c997 0%, #138c6e 100%)', 
-      padding: '2rem', 
-      color: 'white',
-      fontFamily: '"Inter", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
+      ...styles.container,
+      background: 'linear-gradient(135deg, #20c997 0%, #138c6e 100%)'
     }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      <div style={styles.contentWrapper}>
         {/* Header */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '2rem'
-        }}>
-          <div>
+        <div style={styles.header}>
+          <div style={{ flex: 1 }}>
             <div style={{
               display: 'inline-block',
               background: 'rgba(255,255,255,0.2)',
@@ -522,50 +516,25 @@ function UserGreeting({ user }) {
             }}>
               Lecture 3 • JavaScript Essentials
             </div>
-            <h1 style={{ margin: '0', fontSize: '2.5rem', fontWeight: '700' }}>
+            <h1 style={styles.title}>
               Essential JavaScript for React
             </h1>
-            <p style={{ margin: '0.5rem 0 0 0', fontSize: '1.1rem', opacity: '0.9' }}>
+            <p style={styles.subtitle}>
               Master these JavaScript concepts to become proficient in React
             </p>
           </div>
-          <Link to="/" style={{ 
-            background: 'rgba(255,255,255,0.2)', 
-            color: 'white',
-            padding: '0.75rem 1.5rem',
-            borderRadius: '8px',
-            textDecoration: 'none',
-            fontWeight: '500'
-          }}>
+          <Link to="/" style={styles.backButton}>
             ← Back to Home
           </Link>
         </div>
 
         {/* Navigation */}
-        <div style={{
-          display: 'flex',
-          gap: '0.5rem',
-          marginBottom: '2rem',
-          flexWrap: 'wrap'
-        }}>
+        <div style={styles.navigation}>
           {Object.entries(jsTopics).map(([key, topic]) => (
             <button
               key={key}
               onClick={() => setActiveSection(key)}
-              style={{
-                background: activeSection === key ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)',
-                border: activeSection === key ? '2px solid rgba(255,255,255,0.5)' : '1px solid rgba(255,255,255,0.2)',
-                color: 'white',
-                padding: '0.75rem 1.25rem',
-                borderRadius: '25px',
-                cursor: 'pointer',
-                fontWeight: activeSection === key ? '600' : '500',
-                fontSize: '0.9rem',
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
+              style={styles.navButton(activeSection === key)}
             >
               <span style={{ fontSize: '1.1rem' }}>{topic.icon}</span>
               {topic.title}
@@ -574,36 +543,20 @@ function UserGreeting({ user }) {
         </div>
 
         {/* Active Section Content */}
-        <div style={{
-          background: 'rgba(255,255,255,0.1)',
-          borderRadius: '12px',
-          padding: '2rem',
-          backdropFilter: 'blur(10px)'
-        }}>
+        <div style={styles.contentArea}>
           {/* Topic Header */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem',
-            marginBottom: '1.5rem'
-          }}>
-            <span style={{ fontSize: '3rem' }}>
+          <div style={styles.sectionHeader}>
+            <span style={styles.sectionIcon}>
               {jsTopics[activeSection].icon}
             </span>
-            <div>
-              <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '2rem' }}>
+            <div style={{ flex: 1 }}>
+              <h2 style={styles.sectionTitle}>
                 {jsTopics[activeSection].title}
               </h2>
-              <p style={{ margin: '0 0 0.5rem 0', fontSize: '1.1rem', opacity: '0.9' }}>
+              <p style={styles.sectionDescription}>
                 {jsTopics[activeSection].description}
               </p>
-              <div style={{
-                background: 'rgba(255,200,100,0.2)',
-                padding: '0.75rem',
-                borderRadius: '6px',
-                borderLeft: '4px solid rgba(255,200,100,0.6)',
-                fontSize: '0.95rem'
-              }}>
+              <div style={styles.infoBox}>
                 <strong>Why it matters in React:</strong> {jsTopics[activeSection].importance}
               </div>
             </div>
@@ -612,32 +565,14 @@ function UserGreeting({ user }) {
           {/* Examples */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {jsTopics[activeSection].examples.map((example, idx) => (
-              <div key={idx} style={{
-                background: 'rgba(0,0,0,0.1)',
-                borderRadius: '8px',
-                padding: '1.5rem'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '1rem'
-                }}>
-                  <h3 style={{ margin: '0', fontSize: '1.4rem' }}>
+              <div key={idx} style={styles.exampleContainer}>
+                <div style={styles.exampleHeader}>
+                  <h3 style={styles.exampleTitle}>
                     {example.title}
                   </h3>
                   <button
                     onClick={() => toggleOutput(`${activeSection}-${idx}`)}
-                    style={{
-                      background: showOutput[`${activeSection}-${idx}`] ? 'rgba(255,100,100,0.8)' : 'rgba(100,255,100,0.8)',
-                      color: 'white',
-                      border: 'none',
-                      padding: '0.5rem 1rem',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontSize: '0.8rem',
-                      fontWeight: '500'
-                    }}
+                    style={styles.toggleButton(showOutput[`${activeSection}-${idx}`])}
                   >
                     {showOutput[`${activeSection}-${idx}`] ? 'Hide Output' : 'Show Output'}
                   </button>
@@ -648,15 +583,7 @@ function UserGreeting({ user }) {
                   <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '1rem', opacity: '0.9' }}>
                     JavaScript Code:
                   </h4>
-                  <pre style={{
-                    background: 'rgba(0,0,0,0.3)',
-                    padding: '1.5rem',
-                    borderRadius: '6px',
-                    overflow: 'auto',
-                    fontSize: '0.85rem',
-                    lineHeight: '1.4',
-                    margin: '0'
-                  }}>
+                  <pre style={styles.codeBlock}>
                     <code>{example.code}</code>
                   </pre>
                 </div>
@@ -667,15 +594,7 @@ function UserGreeting({ user }) {
                     <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '1rem', opacity: '0.9' }}>
                       Console Output:
                     </h4>
-                    <pre style={{
-                      background: 'rgba(0,100,0,0.2)',
-                      padding: '1rem',
-                      borderRadius: '6px',
-                      fontSize: '0.85rem',
-                      lineHeight: '1.4',
-                      margin: '0',
-                      border: '1px solid rgba(0,200,0,0.3)'
-                    }}>
+                    <pre style={styles.outputBlock}>
                       <code>{example.output}</code>
                     </pre>
                   </div>
@@ -688,13 +607,8 @@ function UserGreeting({ user }) {
                       React Usage Example:
                     </h4>
                     <pre style={{
+                      ...styles.codeBlock,
                       background: 'rgba(100,200,255,0.2)',
-                      padding: '1.5rem',
-                      borderRadius: '6px',
-                      overflow: 'auto',
-                      fontSize: '0.85rem',
-                      lineHeight: '1.4',
-                      margin: '0',
                       border: '1px solid rgba(100,200,255,0.3)'
                     }}>
                       <code>{example.reactExample}</code>

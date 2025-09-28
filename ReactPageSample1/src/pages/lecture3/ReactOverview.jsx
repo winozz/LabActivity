@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PresenterNotes from '../../components/PresenterNotes.jsx';
 import PresentationMode from '../../components/PresentationMode.jsx';
+import { getMobileStyles } from '../../utils/mobileStyles.js';
 
 const ReactOverview = () => {
   const [activeSection, setActiveSection] = useState('components');
   const [showPresentation, setShowPresentation] = useState(false);
+  const styles = getMobileStyles();
 
   const reactConcepts = {
     components: {
