@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import VersionShell from '../layout/VersionShell.jsx';
-import { usersV04 } from '../mockData/users.v04.js';
+import VersionShell from '../../../layout/VersionShell.jsx';
+import { usersV04 } from '../../../mockData/users.v04.js';
 
 export default function V04Accounts() {
   const [currentUser, setCurrentUser] = useState(null);

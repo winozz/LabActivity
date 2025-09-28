@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VersionShell from '../layout/VersionShell.jsx';
+import VersionShell from '../../../layout/VersionShell.jsx';
 
 // Simple in-memory profile + password simulation (NOT secure, demonstration only)
 const mockUser = {

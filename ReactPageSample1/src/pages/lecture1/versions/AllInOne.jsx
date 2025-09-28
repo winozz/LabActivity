@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import VersionShell from '../layout/VersionShell.jsx';
-import { productsV02 } from '../mockData/products.v02.js';
-import { productsV03 } from '../mockData/products.v03.js';
-import { usersV04 } from '../mockData/users.v04.js';
+import VersionShell from '../../../layout/VersionShell.jsx';
+import { productsV02 } from '../../../mockData/products.v02.js';
+import { productsV03 } from '../../../mockData/products.v03.js';
+import { usersV04 } from '../../../mockData/users.v04.js';
 
 // Ordered version metadata
 const VERSION_STEPS = [

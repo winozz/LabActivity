@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import VersionShell from '../layout/VersionShell.jsx';
-import { productsV03 } from '../mockData/products.v03.js';
+import VersionShell from '../../../layout/VersionShell.jsx';
+import { productsV03 } from '../../../mockData/products.v03.js';
 
 export default function V03Cart() {
   const [cart, setCart] = useState([]);

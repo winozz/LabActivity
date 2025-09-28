@@ -1,32 +1,44 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import Checkpoints from './pages/lecture1/Checkpoints.jsx';
-import ECommerceRoadmap from './pages/lecture1/ECommerceRoadmap.jsx';
-import Dashboard from './pages/lecture1/Dashboard.jsx';
-import V01Initial from './pages/lecture1/versions/V01Initial.jsx';
-import V02Catalog from './pages/lecture1/versions/V02Catalog.jsx';
-import V03Cart from './pages/lecture1/versions/V03Cart.jsx';
-import V04Accounts from './pages/lecture1/versions/V04Accounts.jsx';
-import V05Database from './pages/lecture1/versions/V05Database.jsx';
-import V06Checkout from './pages/lecture1/versions/V06Checkout.jsx';
-import V07UI from './pages/lecture1/versions/V07UI.jsx';
-import V08Payment from './pages/lecture1/versions/V08Payment.jsx';
-import V10Release from './pages/lecture1/versions/V10Release.jsx';
-import VersionsIndex from './pages/lecture1/versions/VersionsIndex.jsx';
-import AllInOne from './pages/lecture1/versions/AllInOne.jsx';
-import GitSyncDemo from './pages/lecture2/GitSyncDemo.jsx';
-import GitGuide from './pages/lecture2/GitGuide.jsx';
-import GitOpsPresentation from './pages/lecture2/GitOpsPresentation';
-import GitOpsLMS from './pages/lecture2/GitOpsLMS';
-import GitOpsSimulator from './pages/lecture2/GitOpsSimulator';
-import V11AccountMgmt from './pages/lecture1/versions/V11AccountMgmt.jsx';
-import Lecture3Preview from './pages/lecture3/Lecture3Preview.jsx';
-import ReactOverview from './pages/lecture3/ReactOverview.jsx';
-import DevelopmentSetup from './pages/lecture3/DevelopmentSetup.jsx';
-import PureReact from './pages/lecture3/PureReact.jsx';
-import JavaScriptEssentials from './pages/lecture3/JavaScriptEssentials.jsx';
-import ComponentsDeepDive from './pages/lecture3/ComponentsDeepDive.jsx';
-import StateAndProps from './pages/lecture3/StateAndProps.jsx';
+
+// Import all Lecture 1 components (E-Commerce Project)
+import {
+  Dashboard,
+  Checkpoints,
+  ECommerceRoadmap,
+  V01Initial,
+  V02Catalog,
+  V03Cart,
+  V04Accounts,
+  V05Database,
+  V06Checkout,
+  V07UI,
+  V08Payment,
+  V10Release,
+  V11AccountMgmt,
+  VersionsIndex,
+  AllInOne
+} from './pages/lecture1';
+
+// Import all Lecture 2 components (DevOps & GitOps)
+import {
+  GitGuide,
+  GitOpsLMS,
+  GitOpsPresentation,
+  GitOpsSimulator,
+  GitSyncDemo
+} from './pages/lecture2';
+
+// Import all Lecture 3 components (React Fundamentals)
+import {
+  ReactOverview,
+  DevelopmentSetup,
+  PureReact,
+  JavaScriptEssentials,
+  ComponentsDeepDive,
+  StateAndProps,
+  Lecture3Preview
+} from './pages/lecture3';
 
 // Dynamic lecture data structure for easy future additions
 const lectureData = [
@@ -35,6 +47,7 @@ const lectureData = [
     title: "Lecture 1: E-Commerce Project",
     color: "#fd7e14",
     headerColor: "#d56208",
+    description: "Full-stack web application development with version control",
     links: [
       { to: "/dashboard", label: "Dashboard", featured: true },
       { to: "/roadmap", label: "Roadmap", featured: true },
@@ -58,6 +71,7 @@ const lectureData = [
     title: "Lecture 2: DevOps & GitOps",
     color: "#6f42c1",
     headerColor: "#563d7c",
+    description: "Development operations and Git-based workflows",
     links: [
       { to: "/gitops-keynote", label: "GitOps Presentation", featured: true },
       { to: "/gitops-lms", label: "DevOps Academy", featured: true },
@@ -71,6 +85,7 @@ const lectureData = [
     title: "Lecture 3: React Fundamentals",
     color: "#20c997",
     headerColor: "#138c6e",
+    description: "Component-based architecture and modern JavaScript",
     links: [
       { to: "/lecture3/overview", label: "React Overview", featured: true },
       { to: "/lecture3/setup", label: "Development Setup", featured: true },
@@ -104,6 +119,7 @@ function Home() {
       minHeight: '100vh',
       color: '#334155'
     }}>
+      {/* Header Section */}
       <div style={{
         background: 'linear-gradient(135deg, #333F50 0%, #161c24 100%)',
         padding: '2rem',
@@ -171,7 +187,64 @@ function Home() {
           </p>
         </div>
       </div>
+
+      {/* Project Structure Info */}
+      <div style={{
+        background: 'rgba(59, 130, 246, 0.1)',
+        border: '1px solid rgba(59, 130, 246, 0.2)',
+        borderRadius: '12px',
+        padding: '1.5rem',
+        marginBottom: '2rem'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          marginBottom: '0.75rem'
+        }}>
+          <span style={{ fontSize: '1.5rem' }}>📁</span>
+          <h2 style={{ margin: '0', fontSize: '1.2rem', color: '#1e40af' }}>
+            Organized Project Structure
+          </h2>
+        </div>
+        <p style={{ 
+          margin: '0', 
+          fontSize: '0.95rem', 
+          opacity: '0.8',
+          lineHeight: '1.5'
+        }}>
+          This project is now organized with a clean folder structure: 
+          <code style={{ 
+            background: 'rgba(0,0,0,0.1)', 
+            padding: '0.2rem 0.4rem', 
+            borderRadius: '3px', 
+            margin: '0 0.25rem' 
+          }}>
+            pages/lecture1/
+          </code>
+          for E-Commerce, 
+          <code style={{ 
+            background: 'rgba(0,0,0,0.1)', 
+            padding: '0.2rem 0.4rem', 
+            borderRadius: '3px', 
+            margin: '0 0.25rem' 
+          }}>
+            pages/lecture2/
+          </code>
+          for DevOps, and 
+          <code style={{ 
+            background: 'rgba(0,0,0,0.1)', 
+            padding: '0.2rem 0.4rem', 
+            borderRadius: '3px', 
+            margin: '0 0.25rem' 
+          }}>
+            pages/lecture3/
+          </code>
+          for React. Each lecture has its own dedicated components and resources.
+        </p>
+      </div>
       
+      {/* Navigation Cards */}
       <nav style={{
         display:'flex', 
         flexDirection:'column', 
@@ -216,7 +289,17 @@ function Home() {
               }}>
                 {lecture.id}
               </span>
-              {lecture.title}
+              <div>
+                <div>{lecture.title}</div>
+                <div style={{ 
+                  fontSize: '0.8rem', 
+                  opacity: '0.9', 
+                  fontWeight: '400',
+                  marginTop: '0.25rem'
+                }}>
+                  {lecture.description}
+                </div>
+              </div>
               
               {/* Decorative circle */}
               <div style={{
@@ -352,6 +435,8 @@ export default function App() {
     <BrowserRouter basename="/LabActivity/">
       <Routes>
         <Route path="/" element={<Home />} />
+        
+        {/* Lecture 1 Routes - E-Commerce Project */}
         <Route path="/checkpoints" element={<Checkpoints />} />
         <Route path="/roadmap" element={<ECommerceRoadmap />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -366,12 +451,16 @@ export default function App() {
         <Route path="/versions/v0.8" element={<V08Payment />} />
         <Route path="/versions/v1.0" element={<V10Release />} />
         <Route path="/versions/v1.1" element={<V11AccountMgmt />} />
+        <Route path="/versions/all" element={<AllInOne />} />
+        
+        {/* Lecture 2 Routes - DevOps & GitOps */}
         <Route path="/git-sync" element={<GitSyncDemo />} />
         <Route path="/git-guide" element={<GitGuide />} />
         <Route path="/gitops-keynote" element={<GitOpsPresentation />} />
         <Route path="/gitops-lms" element={<GitOpsLMS />} />
         <Route path="/gitops-simulator" element={<GitOpsSimulator />} />
-        <Route path="/versions/all" element={<AllInOne />} />
+        
+        {/* Lecture 3 Routes - React Fundamentals */}
         <Route path="/lecture3/preview" element={<Lecture3Preview />} />
         <Route path="/lecture3/overview" element={<ReactOverview />} />
         <Route path="/lecture3/setup" element={<DevelopmentSetup />} />

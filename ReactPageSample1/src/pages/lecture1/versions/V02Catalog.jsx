@@ -1,6 +1,6 @@
 import React from 'react';
-import VersionShell from '../layout/VersionShell.jsx';
-import { productsV02 } from '../mockData/products.v02.js';
+import VersionShell from '../../../layout/VersionShell.jsx';
+import { productsV02 } from '../../../mockData/products.v02.js';
 
 export default function V02Catalog() {
   return (

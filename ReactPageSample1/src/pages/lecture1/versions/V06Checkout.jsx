@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VersionShell from '../layout/VersionShell.jsx';
+import VersionShell from '../../../layout/VersionShell.jsx';
 
 export default function V06Checkout() {
   const [submitted, setSubmitted] = useState(false);

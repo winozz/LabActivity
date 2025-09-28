@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { sessionManager } from './utils/SessionManager.js';
-import EmbeddedSimulator from './EmbeddedSimulator.jsx';
+import { sessionManager } from '../../utils/SessionManager.js';
+import EmbeddedSimulator from '../../components/EmbeddedSimulator.jsx';
 
 const GitOpsLMS = ({ courseData, courseId = 'gitops-devops-course' }) => {
   const [currentModule, setCurrentModule] = useState(0);

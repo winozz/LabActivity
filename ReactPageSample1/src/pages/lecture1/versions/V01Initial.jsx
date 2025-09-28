@@ -1,5 +1,5 @@
 import React from 'react';
-import VersionShell from '../layout/VersionShell.jsx';
+import VersionShell from '../../../layout/VersionShell.jsx';
 
 export default function V01Initial() {
   return (
