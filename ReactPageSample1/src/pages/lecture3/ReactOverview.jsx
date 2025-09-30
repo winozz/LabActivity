@@ -13,115 +13,542 @@ const ReactOverview = () => {
     components: {
       title: "Component-Based Architecture",
       icon: "🧩",
-      description: "React applications are built using components - reusable, self-contained pieces of code that represent parts of a user interface.",
+      description: "React applications are built using components - reusable, self-contained pieces of code that represent parts of a user interface. Components follow the Single Responsibility Principle and encapsulate both UI logic and presentation.",
       details: [
-        "Components are like JavaScript functions that accept inputs (props) and return React elements",
-        "They can be written as functions or classes",
-        "Components can be composed together to build complex UIs",
-        "Each component manages its own state and lifecycle"
+        "Components are pure functions that transform props and state into React elements (Virtual DOM nodes)",
+        "Functional components use hooks for state and lifecycle management, while class components use lifecycle methods",
+        "Component composition creates hierarchical UI trees with unidirectional data flow",
+        "Each component has its own scope, state management, and can implement custom lifecycle behaviors",
+        "Components support TypeScript for type safety and better developer experience",
+        "Higher-Order Components (HOCs) and Render Props patterns enable advanced composition strategies"
       ],
-      example: `function Welcome(props) {
-  return <h1>Hello, {props.name}!</h1>;
-}
-
-// Usage
-<Welcome name="Sara" />`
-    },
-    declarative: {
-      title: "Declarative Programming",
-      icon: "📋",
-      description: "React makes it painless to create interactive UIs by using a declarative approach - you describe what the UI should look like for any given state.",
-      details: [
-        "You describe what you want, not how to achieve it",
-        "React efficiently updates the DOM when data changes",
-        "More predictable code that's easier to debug",
-        "Contrast with imperative programming where you specify step-by-step instructions"
-      ],
-      example: `// Declarative (React)
-const [count, setCount] = useState(0);
-return <button onClick={() => setCount(count + 1)}>
-  Count: {count}
-</button>;
-
-// vs Imperative (Vanilla JS)
-// const button = document.createElement('button');
-// button.textContent = 'Count: 0';
-// button.addEventListener('click', function() { ... });`
-    },
-    stateDriven: {
-      title: "State-Driven UI",
-      icon: "🔄",
-      description: "React components can maintain their own state, and the UI automatically updates when state changes.",
-      details: [
-        "State is data that can change over time",
-        "When state changes, React re-renders the component",
-        "State should be treated as immutable",
-        "Use hooks like useState to manage state in functional components"
-      ],
-      example: `function Counter() {
-  const [count, setCount] = useState(0);
+      example: `// Functional Component with Hooks
+function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    // Async data fetching with cleanup
+    const abortController = new AbortController();
+    
+    fetchUser(userId, { signal: abortController.signal })
+      .then(userData => {
+        setUser(userData);
+        setLoading(false);
+      })
+      .catch(error => {
+        if (error.name !== 'AbortError') {
+          console.error('Failed to fetch user:', error);
+          setLoading(false);
+        }
+      });
+    
+    // Cleanup function prevents memory leaks
+    return () => abortController.abort();
+  }, [userId]);
+  
+  if (loading) return <LoadingSpinner />;
+  if (!user) return <ErrorMessage />;
   
   return (
-    <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
+    <div className="user-profile">
+      <Avatar src={user.avatar} alt={user.name} />
+      <h2>{user.name}</h2>
+      <ContactInfo email={user.email} phone={user.phone} />
     </div>
   );
-}`
+}
+
+// Component Composition Example
+function App() {
+  return (
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/profile/:id" element={<UserProfile />} />
+      </Routes>
+      <Footer />
+    </Router>
+  );
+}`,
+      technicalConcepts: [
+        {
+          title: "Virtual DOM & Reconciliation",
+          description: "React creates a virtual representation of the DOM in memory and uses a diffing algorithm to minimize actual DOM manipulations"
+        },
+        {
+          title: "Component Lifecycle",
+          description: "Components go through mounting, updating, and unmounting phases, each with specific hook or method opportunities"
+        },
+        {
+          title: "Props vs State",
+          description: "Props are immutable data passed from parent components, while state is mutable data managed within the component"
+        }
+      ]
+    },
+    declarative: {
+      title: "Declarative Programming Paradigm",
+      icon: "📋",
+      description: "React embraces declarative programming where you describe the desired UI state rather than imperative DOM manipulation steps. This paradigm shift enables predictable, maintainable code through functional programming principles.",
+      details: [
+        "Declarative code describes 'what' the UI should look like for any given state, not 'how' to achieve it",
+        "React's reconciliation algorithm efficiently updates the DOM using a Virtual DOM diffing process",
+        "Functional programming concepts like immutability and pure functions reduce side effects",
+        "State transitions are predictable and can be reasoned about mathematically",
+        "Time-travel debugging and state replay become possible with predictable state changes",
+        "Declarative patterns enable better testing through predictable input/output relationships"
+      ],
+      example: `// Declarative React (Functional Programming)
+function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState('all');
+  
+  // Pure function - same input always produces same output
+  const filteredTodos = useMemo(() => {
+    switch (filter) {
+      case 'completed': return todos.filter(todo => todo.completed);
+      case 'active': return todos.filter(todo => !todo.completed);
+      default: return todos;
+    }
+  }, [todos, filter]);
+  
+  // Immutable state updates
+  const toggleTodo = useCallback((id) => {
+    setTodos(prevTodos => 
+      prevTodos.map(todo => 
+        todo.id === id 
+          ? { ...todo, completed: !todo.completed }
+          : todo
+      )
+    );
+  }, []);
+  
+  // Declarative UI description
+  return (
+    <div className="todo-app">
+      <TodoForm onSubmit={addTodo} />
+      <FilterButtons 
+        currentFilter={filter} 
+        onFilterChange={setFilter} 
+      />
+      <TodoList 
+        todos={filteredTodos} 
+        onToggle={toggleTodo} 
+      />
+    </div>
+  );
+}
+
+// vs Imperative Vanilla JavaScript
+/*
+function updateTodoDisplay() {
+  const todoList = document.getElementById('todo-list');
+  todoList.innerHTML = ''; // Clear existing items
+  
+  todos.forEach(todo => {
+    const li = document.createElement('li');
+    li.textContent = todo.text;
+    if (todo.completed) {
+      li.classList.add('completed');
+    }
+    li.addEventListener('click', () => toggleTodo(todo.id));
+    todoList.appendChild(li);
+  });
+}
+*/`,
+      technicalConcepts: [
+        {
+          title: "Virtual DOM Reconciliation",
+          description: "React maintains a virtual representation of the DOM and uses a diffing algorithm to compute minimal changes needed for updates"
+        },
+        {
+          title: "Immutable Data Patterns",
+          description: "State updates create new objects rather than mutating existing ones, enabling time-travel debugging and predictable state management"
+        },
+        {
+          title: "Functional Programming Benefits",
+          description: "Pure functions, higher-order components, and immutability reduce bugs and make code more testable and maintainable"
+        }
+      ]
+    },
+    stateDriven: {
+      title: "State-Driven UI Architecture",
+      icon: "🔄",
+      description: "React implements unidirectional data flow where UI is a pure function of state. State management drives all UI updates through a predictable, reactive system that ensures UI consistency and enables powerful debugging capabilities.",
+      details: [
+        "State represents the complete UI condition at any point in time, following the single source of truth principle",
+        "React's reconciliation engine automatically re-renders components when state changes, using efficient diffing",
+        "Unidirectional data flow prevents circular dependencies and makes state changes predictable",
+        "State should be treated as immutable to enable time-travel debugging and performance optimizations",
+        "Hook-based state management (useState, useReducer) provides fine-grained reactivity",
+        "State lifting and context provide solutions for sharing state across component boundaries",
+        "Advanced patterns include state machines, reducers, and reactive programming with observables"
+      ],
+      example: `// Advanced State Management Example
+function useAdvancedCounter(initialValue = 0) {
+  const [state, dispatch] = useReducer(counterReducer, {
+    count: initialValue,
+    history: [initialValue],
+    isLoading: false
+  });
+  
+  // Actions with async support
+  const actions = useMemo(() => ({
+    increment: () => dispatch({ type: 'INCREMENT' }),
+    decrement: () => dispatch({ type: 'DECREMENT' }),
+    reset: () => dispatch({ type: 'RESET', payload: initialValue }),
+    setAsync: async (value) => {
+      dispatch({ type: 'SET_LOADING', payload: true });
+      try {
+        // Simulate async operation
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        dispatch({ type: 'SET_VALUE', payload: value });
+      } finally {
+        dispatch({ type: 'SET_LOADING', payload: false });
+      }
+    },
+    undo: () => dispatch({ type: 'UNDO' })
+  }), [initialValue]);
+  
+  return [state, actions];
+}
+
+// Reducer with immutable state updates
+function counterReducer(state, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return {
+        ...state,
+        count: state.count + 1,
+        history: [...state.history, state.count + 1]
+      };
+    case 'DECREMENT':
+      return {
+        ...state,
+        count: state.count - 1,
+        history: [...state.history, state.count - 1]
+      };
+    case 'RESET':
+      return {
+        ...state,
+        count: action.payload,
+        history: [action.payload]
+      };
+    case 'SET_VALUE':
+      return {
+        ...state,
+        count: action.payload,
+        history: [...state.history, action.payload],
+        isLoading: false
+      };
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.payload
+      };
+    case 'UNDO':
+      const newHistory = state.history.slice(0, -1);
+      return {
+        ...state,
+        count: newHistory[newHistory.length - 1] || 0,
+        history: newHistory
+      };
+    default:
+      return state;
+  }
+}
+
+// Component using advanced state management
+function AdvancedCounter() {
+  const [{ count, history, isLoading }, actions] = useAdvancedCounter(0);
+  
+  return (
+    <div className="advanced-counter">
+      <h2>Count: {count}</h2>
+      <div className="controls">
+        <button onClick={actions.increment} disabled={isLoading}>
+          +
+        </button>
+        <button onClick={actions.decrement} disabled={isLoading}>
+          -
+        </button>
+        <button onClick={actions.reset} disabled={isLoading}>
+          Reset
+        </button>
+        <button 
+          onClick={() => actions.setAsync(Math.floor(Math.random() * 100))}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Loading...' : 'Random'}
+        </button>
+        <button 
+          onClick={actions.undo} 
+          disabled={isLoading || history.length <= 1}
+        >
+          Undo
+        </button>
+      </div>
+      <div className="history">
+        History: {history.join(' → ')}
+      </div>
+    </div>
+  );
+}`,
+      technicalConcepts: [
+        {
+          title: "State Immutability",
+          description: "State updates create new objects rather than mutating existing ones, enabling efficient change detection and debugging"
+        },
+        {
+          title: "Unidirectional Data Flow",
+          description: "Data flows down through props and events flow up through callbacks, creating predictable and debuggable applications"
+        },
+        {
+          title: "State Lifting & Context",
+          description: "Shared state can be moved up the component tree or managed through React Context for cross-component communication"
+        }
+      ]
     },
     library: {
-      title: "JavaScript Library",
+      title: "JavaScript Library Architecture",
       icon: "📚",
-      description: "React is a library, not a framework. It focuses specifically on building user interfaces and gives you the flexibility to choose other tools.",
+      description: "React is a focused JavaScript library rather than a full framework, implementing the Unix philosophy of 'do one thing and do it well'. This architectural decision provides maximum flexibility while maintaining a minimal core that can be extended with ecosystem tools.",
       details: [
-        "Focused on the view layer of applications",
-        "Can be integrated into existing projects gradually",
-        "Doesn't dictate how you handle routing, state management, or styling",
-        "Ecosystem of complementary libraries (React Router, Redux, etc.)"
+        "Library vs Framework: React provides view layer functionality without imposing architectural constraints",
+        "Minimal core with extensible plugin architecture through the React ecosystem",
+        "Can be integrated incrementally into existing applications without complete rewrites",
+        "Ecosystem flexibility allows choosing best-in-class solutions for routing, state management, and tooling",
+        "React's core focuses on component rendering, state management, and Virtual DOM reconciliation",
+        "Framework-like capabilities achieved through composition of libraries (React Router, Redux, etc.)",
+        "Build tool agnostic - works with Webpack, Vite, Parcel, or even without build tools"
       ],
-      example: `// React can be added to any HTML page
-<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+      example: `// Incremental Integration Example
+// Existing vanilla JS application
+function initializeApp() {
+  // Legacy code continues to work
+  initializeLegacyComponents();
+  
+  // Add React to specific parts
+  const reactMountPoint = document.getElementById('react-component');
+  if (reactMountPoint) {
+    const root = ReactDOM.createRoot(reactMountPoint);
+    root.render(<ModernReactComponent />);
+  }
+}
 
-// Or used in modern build systems
+// Flexible Architecture Example
+// You choose your own tech stack
 import React from 'react';
-import ReactDOM from 'react-dom/client';`
+import { BrowserRouter } from 'react-router-dom'; // Choose your router
+import { Provider } from 'react-redux'; // Choose your state management
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Choose your data fetching
+import { ThemeProvider } from 'styled-components'; // Choose your styling solution
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <AppRoutes />
+          </ThemeProvider>
+        </BrowserRouter>
+      </Provider>
+    </QueryClientProvider>
+  );
+}
+
+// vs Framework approach (Angular example)
+/*
+@NgModule({
+  imports: [
+    BrowserModule,        // Required
+    RouterModule,         // Framework's router
+    HttpClientModule,     // Framework's HTTP client
+    FormsModule          // Framework's forms
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+*/
+
+// React's Bundle Size Comparison
+// React core: ~42KB (production build)
+// Angular: ~130KB+ (minimal app)
+// Vue: ~34KB (core + template compiler)
+
+// CDN Usage Example (No build tools required)
+/*
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script type="text/babel">
+  function Hello() {
+    return React.createElement('h1', null, 'Hello, World!');
+  }
+  
+  ReactDOM.render(React.createElement(Hello), document.getElementById('root'));
+</script>
+*/`,
+      technicalConcepts: [
+        {
+          title: "Library vs Framework Trade-offs",
+          description: "Libraries provide flexibility but require more decisions; frameworks provide structure but less flexibility"
+        },
+        {
+          title: "Incremental Adoption Strategy",
+          description: "React can be gradually introduced to existing codebases without requiring complete rewrites"
+        },
+        {
+          title: "Ecosystem Composition",
+          description: "React's minimal core allows developers to compose best-in-class solutions for their specific needs"
+        }
+      ]
     },
     popular: {
-      title: "Extremely Popular",
+      title: "Industry Adoption & Ecosystem",
       icon: "🌟",
-      description: "React is one of the most popular frontend technologies, used by millions of developers and major companies worldwide.",
+      description: "React has achieved unprecedented adoption in the JavaScript ecosystem, becoming the de facto standard for modern frontend development. Its popularity stems from strong technical foundations, active community, and enterprise-grade tooling ecosystem.",
       details: [
-        "Used by Facebook, Netflix, Airbnb, Instagram, and many others",
-        "Large and active community with extensive ecosystem",
-        "Abundant learning resources, tutorials, and documentation",
-        "High demand skill in the job market"
+        "Used by Fortune 500 companies including Meta, Netflix, Airbnb, Uber, WhatsApp, and Instagram",
+        "GitHub: 220,000+ stars, 45,000+ forks, representing massive community engagement",
+        "NPM ecosystem: 20M+ weekly downloads with 100,000+ React-related packages",
+        "Developer surveys consistently rank React as most loved and wanted frontend technology",
+        "Job market: React skills command premium salaries and have highest demand in frontend development",
+        "Corporate backing from Meta ensures long-term stability and continued innovation",
+        "Active RFC (Request for Comments) process allows community input on future development"
       ],
       stats: [
-        { label: "GitHub Stars", value: "220k+" },
-        { label: "NPM Weekly Downloads", value: "20M+" },
-        { label: "Stack Overflow Questions", value: "400k+" },
-        { label: "Job Postings", value: "High Demand" }
+        { label: "GitHub Stars", value: "220k+", detail: "Most starred UI library" },
+        { label: "NPM Weekly Downloads", value: "20M+", detail: "Massive adoption rate" },
+        { label: "Stack Overflow Questions", value: "400k+", detail: "Active community support" },
+        { label: "Job Market Demand", value: "85%", detail: "Of frontend job postings" },
+        { label: "Developer Satisfaction", value: "87%", detail: "Would use again (Stack Overflow 2023)" },
+        { label: "Production Websites", value: "10M+", detail: "Built with React worldwide" }
+      ],
+      marketAnalysis: {
+        salaryData: [
+          { level: "Junior React Developer", salary: "$65,000 - $85,000", experience: "0-2 years" },
+          { level: "Mid-level React Developer", salary: "$85,000 - $120,000", experience: "2-5 years" },
+          { level: "Senior React Developer", salary: "$120,000 - $180,000", experience: "5+ years" },
+          { level: "React Architect", salary: "$150,000 - $250,000", experience: "8+ years" }
+        ],
+        industryTrends: [
+          "React Native expanding React skills to mobile development",
+          "Next.js driving React adoption in full-stack development",
+          "Server-side rendering (SSR) becoming standard for performance",
+          "React 18 concurrent features enabling new UI patterns"
+        ]
+      },
+      technicalConcepts: [
+        {
+          title: "Enterprise Adoption Factors",
+          description: "Large-scale applications benefit from React's component reusability, TypeScript support, and mature testing ecosystem"
+        },
+        {
+          title: "Developer Experience (DX)",
+          description: "Excellent tooling including React DevTools, hot reloading, and extensive IDE support drives adoption"
+        },
+        {
+          title: "Performance at Scale",
+          description: "Virtual DOM, code splitting, and concurrent rendering enable React to handle complex, high-traffic applications"
+        }
       ]
     },
     facebook: {
-      title: "Created by Facebook",
+      title: "Meta Engineering & Open Source",
       icon: "👥",
-      description: "React was created by Jordan Walke at Facebook in 2011 and open-sourced in 2013. It continues to be maintained by Meta and the community.",
+      description: "React was created by Jordan Walke at Facebook (now Meta) in 2011 to solve complex UI problems at scale. Its open-source success demonstrates how enterprise solutions can benefit the entire developer community.",
       details: [
-        "Originally developed to solve Facebook's UI complexity issues",
-        "First used in Facebook's newsfeed in 2011",
-        "Open-sourced at JSConf US in May 2013",
-        "Now maintained by Meta (Facebook) and the open-source community"
+        "Originally developed to solve Facebook's news feed performance and complexity issues",
+        "First production deployment in Facebook's news feed (2011), later Instagram (2012)",
+        "Open-sourced at JSConf US in May 2013, revolutionizing frontend development",
+        "Maintained by Meta's dedicated React team with contributions from 1,500+ community contributors",
+        "React's development philosophy: 'Move Fast and Don't Break Things' through careful API design",
+        "Concurrent development of React Native (2015) proved React's architecture could transcend web development",
+        "RFC (Request for Comments) process ensures community input on major changes"
       ],
       timeline: [
-        { year: "2011", event: "Initial development at Facebook" },
-        { year: "2013", event: "Open-sourced to the public" },
-        { year: "2015", event: "React Native released" },
-        { year: "2019", event: "React Hooks introduced" },
-        { year: "2022", event: "React 18 with Concurrent Features" }
+        { 
+          year: "2011", 
+          event: "Initial development by Jordan Walke", 
+          impact: "Solved Facebook's UI complexity problems",
+          technical: "Introduced Virtual DOM concept"
+        },
+        { 
+          year: "2013", 
+          event: "Open-sourced to the public", 
+          impact: "Sparked declarative UI revolution",
+          technical: "Made Virtual DOM mainstream"
+        },
+        { 
+          year: "2015", 
+          event: "React Native released", 
+          impact: "Extended React to mobile development",
+          technical: "Proved architecture portability"
+        },
+        { 
+          year: "2016", 
+          event: "React Fiber architecture", 
+          impact: "Enabled concurrent rendering",
+          technical: "Rewrote reconciliation algorithm"
+        },
+        { 
+          year: "2019", 
+          event: "React Hooks introduced", 
+          impact: "Simplified state management",
+          technical: "Functional programming paradigm"
+        },
+        { 
+          year: "2022", 
+          event: "React 18 with Concurrent Features", 
+          impact: "Performance and UX improvements",
+          technical: "Automatic batching, Suspense, Transitions"
+        }
+      ],
+      technicalEvolution: {
+        architecturalMilestones: [
+          {
+            version: "React 0.3 (2013)",
+            innovation: "Virtual DOM",
+            impact: "Efficient DOM updates through diffing algorithm"
+          },
+          {
+            version: "React 15 (2016)",
+            innovation: "React Fiber",
+            impact: "Incremental rendering and priority-based updates"
+          },
+          {
+            version: "React 16.8 (2019)",
+            innovation: "Hooks API",
+            impact: "State and lifecycle in functional components"
+          },
+          {
+            version: "React 18 (2022)",
+            innovation: "Concurrent Rendering",
+            impact: "Interruptible rendering for better user experience"
+          }
+        ],
+        designPrinciples: [
+          "Gradual Adoption: New features don't break existing code",
+          "Developer Experience: Clear error messages and helpful warnings",
+          "Performance by Default: Optimizations built into the framework",
+          "Declarative API: Predictable code that's easy to reason about"
+        ]
+      },
+      technicalConcepts: [
+        {
+          title: "Enterprise-Scale Problem Solving",
+          description: "React emerged from real-world scaling challenges at one of the world's largest web applications"
+        },
+        {
+          title: "Open Source Governance",
+          description: "Meta's approach to open source includes transparent RFC process and community-driven development"
+        },
+        {
+          title: "Continuous Innovation",
+          description: "React's evolution from class components to hooks to concurrent features shows commitment to developer experience"
+        }
       ]
     }
   };
@@ -309,7 +736,46 @@ import ReactDOM from 'react-dom/client';`
             </ul>
           </div>
 
-          {/* Code Example or Stats */}
+          {/* Technical Concepts Section */}
+          {reactConcepts[activeSection].technicalConcepts && (
+            <div style={{
+              background: 'rgba(0,0,0,0.15)',
+              borderRadius: '8px',
+              padding: '1.5rem',
+              marginBottom: '2rem'
+            }}>
+              <h3 style={{ marginTop: '0', marginBottom: '1.5rem', color: '#64ffda' }}>
+                🔬 Technical Deep Dive
+              </h3>
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+                gap: '1rem' 
+              }}>
+                {reactConcepts[activeSection].technicalConcepts.map((concept, idx) => (
+                  <div key={idx} style={{
+                    background: 'rgba(0,0,0,0.1)',
+                    padding: '1rem',
+                    borderRadius: '6px',
+                    border: '1px solid rgba(255,255,255,0.1)'
+                  }}>
+                    <h4 style={{ 
+                      margin: '0 0 0.75rem 0', 
+                      color: '#64ffda', 
+                      fontSize: '1rem' 
+                    }}>
+                      {concept.title}
+                    </h4>
+                    <p style={{ margin: '0', fontSize: '0.9rem', lineHeight: '1.4' }}>
+                      {concept.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Code Example */}
           {reactConcepts[activeSection].example && (
             <div style={{
               background: 'rgba(0,0,0,0.2)',
@@ -317,73 +783,210 @@ import ReactDOM from 'react-dom/client';`
               padding: '1.5rem',
               marginBottom: '1rem'
             }}>
-              <h3 style={{ marginTop: '0', marginBottom: '1rem' }}>Example:</h3>
+              <h3 style={{ marginTop: '0', marginBottom: '1rem', color: '#64ffda' }}>
+                💻 Code Example:
+              </h3>
               <pre style={{
-                background: 'rgba(0,0,0,0.3)',
-                padding: '1rem',
+                background: 'rgba(0,0,0,0.4)',
+                padding: '1.5rem',
                 borderRadius: '6px',
                 overflow: 'auto',
-                fontSize: '0.9rem',
-                lineHeight: '1.4'
+                fontSize: '0.85rem',
+                lineHeight: '1.4',
+                border: '1px solid rgba(255,255,255,0.1)'
               }}>
-                <code>{reactConcepts[activeSection].example}</code>
+                <code style={{ color: '#a5f3fc' }}>{reactConcepts[activeSection].example}</code>
               </pre>
             </div>
           )}
 
-          {/* Stats for Popular section */}
+          {/* Enhanced Stats for Popular section */}
           {reactConcepts[activeSection].stats && (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '1rem',
-              marginBottom: '1rem'
-            }}>
-              {reactConcepts[activeSection].stats.map((stat, idx) => (
-                <div key={idx} style={{
-                  background: 'rgba(0,0,0,0.2)',
-                  padding: '1.5rem',
-                  borderRadius: '8px',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-                    {stat.value}
-                  </div>
-                  <div style={{ fontSize: '0.9rem', opacity: '0.8' }}>
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Timeline for Facebook section */}
-          {reactConcepts[activeSection].timeline && (
-            <div style={{ marginBottom: '1rem' }}>
-              <h3 style={{ marginBottom: '1rem' }}>React Timeline:</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {reactConcepts[activeSection].timeline.map((item, idx) => (
+            <div style={{ marginBottom: '2rem' }}>
+              <h3 style={{ marginBottom: '1rem', color: '#64ffda' }}>📊 Market Statistics:</h3>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '1rem',
+                marginBottom: '2rem'
+              }}>
+                {reactConcepts[activeSection].stats.map((stat, idx) => (
                   <div key={idx} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '1rem',
-                    padding: '1rem',
-                    background: 'rgba(0,0,0,0.1)',
-                    borderRadius: '8px'
+                    background: 'rgba(0,0,0,0.2)',
+                    padding: '1.5rem',
+                    borderRadius: '8px',
+                    textAlign: 'center',
+                    border: '1px solid rgba(255,255,255,0.1)'
                   }}>
-                    <div style={{
-                      background: 'rgba(255,255,255,0.2)',
-                      padding: '0.5rem 1rem',
-                      borderRadius: '20px',
-                      fontWeight: 'bold',
-                      fontSize: '0.9rem'
-                    }}>
-                      {item.year}
+                    <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem', color: '#64ffda' }}>
+                      {stat.value}
                     </div>
-                    <div>{item.event}</div>
+                    <div style={{ fontSize: '0.9rem', opacity: '0.9', marginBottom: '0.5rem' }}>
+                      {stat.label}
+                    </div>
+                    {stat.detail && (
+                      <div style={{ fontSize: '0.8rem', opacity: '0.7', fontStyle: 'italic' }}>
+                        {stat.detail}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
+              
+              {/* Market Analysis for Popular section */}
+              {reactConcepts[activeSection].marketAnalysis && (
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '2rem',
+                  marginTop: '2rem'
+                }}>
+                  <div style={{
+                    background: 'rgba(0,0,0,0.1)',
+                    padding: '1.5rem',
+                    borderRadius: '8px'
+                  }}>
+                    <h4 style={{ color: '#64ffda', marginBottom: '1rem' }}>💰 Salary Ranges (US)</h4>
+                    {reactConcepts[activeSection].marketAnalysis.salaryData.map((data, idx) => (
+                      <div key={idx} style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '0.75rem',
+                        marginBottom: '0.5rem',
+                        background: 'rgba(255,255,255,0.05)',
+                        borderRadius: '4px'
+                      }}>
+                        <div>
+                          <div style={{ fontWeight: 'bold' }}>{data.level}</div>
+                          <div style={{ fontSize: '0.8rem', opacity: '0.7' }}>{data.experience}</div>
+                        </div>
+                        <div style={{ color: '#64ffda', fontWeight: 'bold' }}>
+                          {data.salary}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div style={{
+                    background: 'rgba(0,0,0,0.1)',
+                    padding: '1.5rem',
+                    borderRadius: '8px'
+                  }}>
+                    <h4 style={{ color: '#64ffda', marginBottom: '1rem' }}>📈 Industry Trends</h4>
+                    {reactConcepts[activeSection].marketAnalysis.industryTrends.map((trend, idx) => (
+                      <div key={idx} style={{
+                        padding: '0.75rem',
+                        marginBottom: '0.5rem',
+                        background: 'rgba(255,255,255,0.05)',
+                        borderRadius: '4px',
+                        borderLeft: '3px solid #64ffda'
+                      }}>
+                        {trend}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Enhanced Timeline for Facebook section */}
+          {reactConcepts[activeSection].timeline && (
+            <div style={{ marginBottom: '2rem' }}>
+              <h3 style={{ marginBottom: '1rem', color: '#64ffda' }}>📅 React Evolution Timeline:</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {reactConcepts[activeSection].timeline.map((item, idx) => (
+                  <div key={idx} style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'auto 1fr',
+                    gap: '1rem',
+                    padding: '1.5rem',
+                    background: 'rgba(0,0,0,0.1)',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255,255,255,0.1)'
+                  }}>
+                    <div style={{
+                      background: 'linear-gradient(135deg, #64ffda, #4facfe)',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '20px',
+                      fontWeight: 'bold',
+                      fontSize: '0.9rem',
+                      color: '#000',
+                      textAlign: 'center',
+                      minWidth: '80px'
+                    }}>
+                      {item.year}
+                    </div>
+                    <div>
+                      <h4 style={{ margin: '0 0 0.5rem 0', color: '#64ffda' }}>
+                        {item.event}
+                      </h4>
+                      {item.impact && (
+                        <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.9rem' }}>
+                          <strong>Impact:</strong> {item.impact}
+                        </p>
+                      )}
+                      {item.technical && (
+                        <p style={{ margin: '0', fontSize: '0.9rem', opacity: '0.8', fontStyle: 'italic' }}>
+                          <strong>Technical:</strong> {item.technical}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Technical Evolution for Facebook section */}
+              {reactConcepts[activeSection].technicalEvolution && (
+                <div style={{ marginTop: '2rem' }}>
+                  <h4 style={{ color: '#64ffda', marginBottom: '1rem' }}>🏗️ Architectural Milestones</h4>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                    gap: '1rem',
+                    marginBottom: '2rem'
+                  }}>
+                    {reactConcepts[activeSection].technicalEvolution.architecturalMilestones.map((milestone, idx) => (
+                      <div key={idx} style={{
+                        background: 'rgba(0,0,0,0.1)',
+                        padding: '1.5rem',
+                        borderRadius: '8px',
+                        border: '1px solid rgba(255,255,255,0.1)'
+                      }}>
+                        <h5 style={{ color: '#64ffda', margin: '0 0 0.5rem 0' }}>
+                          {milestone.version}
+                        </h5>
+                        <p style={{ margin: '0 0 0.5rem 0', fontWeight: 'bold' }}>
+                          {milestone.innovation}
+                        </p>
+                        <p style={{ margin: '0', fontSize: '0.9rem', opacity: '0.8' }}>
+                          {milestone.impact}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <h4 style={{ color: '#64ffda', marginBottom: '1rem' }}>⚡ Design Principles</h4>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                    gap: '0.75rem'
+                  }}>
+                    {reactConcepts[activeSection].technicalEvolution.designPrinciples.map((principle, idx) => (
+                      <div key={idx} style={{
+                        padding: '1rem',
+                        background: 'rgba(100, 255, 218, 0.1)',
+                        borderRadius: '6px',
+                        border: '1px solid rgba(100, 255, 218, 0.2)',
+                        fontSize: '0.9rem'
+                      }}>
+                        {principle}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -435,221 +1038,307 @@ import ReactDOM from 'react-dom/client';`
 const presenterNotes = [
   {
     section: "Component-Based Architecture",
-    duration: "8-10 minutes",
+    duration: "12-15 minutes",
     keyPoints: [
-      "React is all about breaking UI into reusable pieces",
-      "Components are like JavaScript functions that return JSX",
-      "Components can accept props (properties) and manage state",
-      "Think of components as custom HTML elements"
+      "React components follow the Single Responsibility Principle",
+      "Virtual DOM enables efficient UI updates through reconciliation",
+      "Component composition creates reusable, maintainable architectures",
+      "Hooks provide state and lifecycle management in functional components"
     ],
-    script: `Welcome to React! Let's start with the most fundamental concept - components. 
+    script: `Welcome to React! Let's start with the most fundamental concept - component-based architecture.
 
-Think of React components as building blocks for your user interface. Just like you might use LEGO blocks to build something complex, React components let you build complex user interfaces from simple, reusable pieces.
+React revolutionized frontend development by applying software engineering principles to UI development. Components are pure functions that transform props and state into Virtual DOM elements. This functional approach brings predictability and testability to UI code.
 
-A React component is essentially a JavaScript function that returns JSX - which is a syntax extension that looks like HTML but is actually JavaScript. The beauty is that once you create a component, you can use it anywhere in your application, as many times as you want.
+The key insight is that UIs are hierarchical structures that can be decomposed into independent, reusable pieces. Each component encapsulates its own logic, state, and presentation - following the Single Responsibility Principle from SOLID design patterns.
 
-For example, if you create a 'Button' component, you can use it throughout your entire application. Need to change how all buttons look? Just update the Button component, and every button in your app automatically gets updated. This is the power of component-based architecture.`,
+Virtual DOM is React's secret weapon. Instead of directly manipulating the real DOM (which is slow), React maintains a virtual representation in memory. When state changes, React creates a new virtual DOM tree, compares it with the previous version using a diffing algorithm, and efficiently updates only what actually changed in the real DOM.
+
+Component composition is like LEGO blocks - you build complex structures from simple, reusable pieces. This approach scales incredibly well and promotes code reuse across your application.`,
     interactions: [
       {
-        type: "Question to Students",
-        description: "Ask: 'Can anyone think of a website where you see the same UI elements repeated? Like buttons, cards, or navigation items?'"
+        type: "Technical Demo",
+        description: "Show React DevTools to visualize component hierarchy and state changes"
       },
       {
-        type: "Live Demo",
-        description: "Show the Welcome component example in the browser dev tools"
+        type: "Code Walkthrough",
+        description: "Demonstrate the advanced UserProfile component with useEffect cleanup"
+      },
+      {
+        type: "Architecture Discussion",
+        description: "Compare component architecture to traditional MVC patterns"
       }
     ],
     commonQuestions: [
       {
-        question: "What's the difference between a component and a regular HTML element?",
-        answer: "HTML elements are predefined (like <div>, <p>, <button>), but React components are custom elements you create. They can contain logic, state, and can be reused with different data."
+        question: "How does Virtual DOM actually improve performance?",
+        answer: "Virtual DOM operations are pure JavaScript object manipulations (fast), while real DOM operations trigger layout recalculations and repaints (slow). React batches updates and only applies necessary changes."
       },
       {
-        question: "Do I need to know HTML well before learning React?",
-        answer: "Yes, a solid understanding of HTML and CSS is essential since JSX looks similar to HTML, and you'll need CSS for styling your components."
+        question: "When should I use class components vs functional components?",
+        answer: "Use functional components with hooks for all new development. Class components are legacy and only needed for error boundaries or when working with old codebases."
+      },
+      {
+        question: "How do I handle async operations in components?",
+        answer: "Use useEffect with cleanup functions to prevent memory leaks. Consider custom hooks for complex async logic, and state management libraries for global async state."
       }
     ]
   },
   {
-    section: "Declarative Programming",
-    duration: "6-8 minutes",
-    keyPoints: [
-      "Declarative vs Imperative programming paradigms",
-      "You describe 'what' you want, not 'how' to do it",
-      "React handles the DOM manipulation for you",
-      "Makes code more predictable and easier to debug"
-    ],
-    script: `Now let's talk about declarative programming - this is a game-changer in how we think about building user interfaces.
-
-In traditional, imperative programming, you tell the computer exactly HOW to do something, step by step. It's like giving someone directions: 'Go straight, turn left at the light, go two blocks, turn right.' You're specifying every single step.
-
-But declarative programming is different. Instead of saying HOW, you describe WHAT you want the end result to be. It's like telling someone 'I want to go to the coffee shop on Main Street' and letting them figure out the best route.
-
-In React, you declare what your UI should look like for any given state, and React figures out how to make it happen. You don't manually manipulate DOM elements, add classes, or update text content. You just describe what the UI should look like, and React takes care of the rest.
-
-This makes your code much more predictable because you're not worried about the complex steps of updating the interface - you just focus on what it should look like.`,
-    interactions: [
-      {
-        type: "Analogy Exercise",
-        description: "Have students compare imperative vs declarative by thinking about ordering at a restaurant (declarative: 'I want a burger') vs cooking instructions (imperative: 'heat oil, add onions, cook for 3 minutes...')"
-      }
-    ],
-    commonQuestions: [
-      {
-        question: "Is declarative programming always better than imperative?",
-        answer: "Not always! Declarative is great for UI because it's predictable and easier to reason about. But sometimes you need imperative code for specific performance optimizations or complex interactions."
-      },
-      {
-        question: "How does React know when to update the UI?",
-        answer: "React uses a concept called the Virtual DOM and a process called reconciliation. When your data changes, React compares the new virtual representation with the previous one and updates only what actually changed."
-      }
-    ]
-  },
-  {
-    section: "State-Driven UI",
+    section: "Declarative Programming Paradigm",
     duration: "10-12 minutes",
     keyPoints: [
-      "State is data that can change over time",
-      "When state changes, UI automatically updates",
-      "React uses a unidirectional data flow",
-      "State management is crucial for interactive applications"
+      "Declarative code describes 'what' not 'how'",
+      "Functional programming principles reduce bugs and improve maintainability",
+      "Immutable state updates enable time-travel debugging",
+      "React's reconciliation algorithm handles efficient DOM updates"
     ],
-    script: `State is one of the most important concepts in React, so let's really dive into this.
+    script: `Declarative programming is a paradigm shift that makes React incredibly powerful. Instead of writing imperative code that describes step-by-step DOM manipulations, you declare what your UI should look like for any given state.
 
-Think of state as the 'memory' of your component. It's data that can change over time, and when it changes, your component automatically re-renders to reflect those changes.
+This connects to functional programming principles. Your components become pure functions: given the same props and state, they always render the same output. This predictability is what makes React applications easier to reason about, test, and debug.
 
-Here's a simple way to understand it: imagine a light switch in your room. The light can be either 'on' or 'off' - that's its state. When you flip the switch, the state changes, and the room's lighting changes accordingly. React components work the same way.
+Immutability is crucial here. When you update state, you don't modify existing objects - you create new ones. This might seem inefficient, but it enables powerful debugging features like time-travel debugging, where you can step backwards and forwards through state changes.
 
-Let's say you have a counter component. The current count is stored in state. When you click a button to increment the counter, React updates the state and automatically re-renders the component to show the new count. You don't have to manually update the DOM or change the text on the screen - React does it all for you.
+React's reconciliation algorithm is what makes declarative programming performant. You describe the desired end state, and React figures out the most efficient way to get there using its Virtual DOM diffing algorithm.
 
-This is what makes React so powerful for interactive applications. Your UI is always a reflection of your current state, and React ensures they stay in sync.
-
-The key principle here is unidirectional data flow - data flows down through your component tree, and changes flow back up through events. This makes your application much easier to understand and debug.`,
+The mathematical foundation is important: UI = f(state). Your UI is a pure function of your application state. This makes React applications predictable and enables powerful patterns like server-side rendering and static generation.`,
     interactions: [
       {
         type: "Live Coding",
-        description: "Build a simple counter component together, showing how clicking a button changes state and updates the UI"
+        description: "Build the advanced TodoApp showing immutable state updates and pure functions"
       },
       {
-        type: "Student Exercise",
-        description: "Have students brainstorm examples of state in applications they use daily (like social media likes, shopping cart items, form inputs)"
+        type: "Performance Analysis",
+        description: "Use React DevTools Profiler to show reconciliation in action"
+      },
+      {
+        type: "Comparison Exercise",
+        description: "Show equivalent imperative JavaScript code to highlight the difference"
       }
     ],
     commonQuestions: [
       {
-        question: "Can I change state directly?",
-        answer: "No! In React, you should never modify state directly. Always use the setter function (like setState or the function returned by useState) to ensure React knows the state has changed and can update the UI."
+        question: "Doesn't creating new objects every time hurt performance?",
+        answer: "Modern JavaScript engines are optimized for object creation. React's diffing algorithm and immutability actually enable better performance optimizations like React.memo and useMemo."
       },
       {
-        question: "What's the difference between state and props?",
-        answer: "State is internal to a component and can change over time. Props are external data passed to a component from its parent and should not be modified by the component receiving them."
+        question: "How does React know what changed if everything is immutable?",
+        answer: "React uses reference equality checks. If you follow immutability patterns, React can quickly determine what changed by comparing object references rather than deep comparing object contents."
       }
     ]
   },
   {
-    section: "JavaScript Library",
-    duration: "5-7 minutes",
+    section: "State-Driven UI Architecture",
+    duration: "15-18 minutes",
     keyPoints: [
-      "React is a library, not a framework",
-      "Focused specifically on building user interfaces",
-      "Can be integrated into existing projects incrementally",
-      "Flexible - you choose your own tools and architecture"
+      "State represents complete UI condition at any point in time",
+      "Unidirectional data flow prevents circular dependencies",
+      "State immutability enables time-travel debugging",
+      "Advanced patterns include reducers and state machines"
     ],
-    script: `It's important to understand that React is a library, not a framework - and this distinction matters.
+    script: `State management is where React truly shines. State represents the complete condition of your UI at any point in time. This is the 'single source of truth' principle - your entire UI can be derived from your application state.
 
-A framework is like a complete toolkit that gives you everything you need and tells you how to structure your entire application. Think of it like a pre-built house where the rooms, layout, and even some furniture are already decided for you.
+Unidirectional data flow is crucial. Data flows down through props, and changes flow up through callbacks. This creates a predictable data flow that makes debugging much easier. You can trace any UI change back to a state change.
 
-A library, on the other hand, is more like a toolbox. React gives you powerful tools for building user interfaces, but it doesn't dictate how you structure your entire application, what router to use, how to handle data fetching, or how to manage global state.
+The advanced counter example demonstrates several important patterns:
+1. useReducer for complex state logic
+2. Immutable state updates
+3. Action patterns for state changes
+4. History tracking for undo functionality
 
-This makes React incredibly flexible. You can:
-- Add React to just one part of an existing website
-- Choose your own routing solution
-- Pick your preferred state management library
-- Use any build tools you want
+State machines are an advanced pattern where your component can only be in specific states and can only transition between them in predefined ways. This eliminates many classes of bugs.
 
-React focuses on one thing and does it exceptionally well: building interactive user interfaces. For everything else, you have the freedom to choose the best tools for your specific needs.
-
-This flexibility is both a strength and sometimes a challenge for beginners, because you have more decisions to make. But it also means React can adapt to almost any project requirements.`,
+The key insight is that state changes drive UI updates, not the other way around. You never directly manipulate the UI - you update state and let React re-render accordingly.`,
     interactions: [
       {
-        type: "Discussion",
-        description: "Ask students about their experience with other tools - have they used frameworks vs libraries before? What are the pros and cons of each?"
+        type: "Live Implementation",
+        description: "Build the advanced counter component step by step, explaining each pattern"
+      },
+      {
+        type: "State Visualization",
+        description: "Use React DevTools to show state changes and re-renders"
+      },
+      {
+        type: "Architecture Design",
+        description: "Have students design state structure for a complex application"
       }
     ],
     commonQuestions: [
       {
-        question: "Is React harder to learn because it's a library instead of a framework?",
-        answer: "It depends! React itself might be easier to learn because it's focused, but you might need to learn additional libraries for routing, state management, etc. Frameworks give you more out of the box but are more opinionated."
+        question: "When should I use useState vs useReducer?",
+        answer: "Use useState for simple state (primitives, small objects). Use useReducer for complex state logic, multiple related state variables, or when next state depends on previous state."
       },
       {
-        question: "Can I use React with other JavaScript frameworks?",
-        answer: "Generally, no. React is designed to manage the entire UI layer. However, you can migrate from other frameworks to React incrementally or use React for specific parts of a larger application."
+        question: "How do I share state between components?",
+        answer: "Lift state up to common parent, use Context API for widely shared state, or use external state management libraries like Redux or Zustand for complex applications."
+      },
+      {
+        question: "What's the difference between controlled and uncontrolled components?",
+        answer: "Controlled components have their state managed by React (value + onChange). Uncontrolled components manage their own state internally. Prefer controlled components for consistency."
       }
     ]
   },
   {
-    section: "Popularity & Ecosystem",
-    duration: "4-5 minutes",
+    section: "JavaScript Library Architecture",
+    duration: "8-10 minutes",
     keyPoints: [
-      "One of the most popular JavaScript libraries",
-      "Strong job market demand",
-      "Huge ecosystem of third-party packages",
-      "Active community and continuous development"
+      "Library vs Framework: flexibility vs convention",
+      "Incremental adoption strategy",
+      "Ecosystem composition allows best-in-class solutions",
+      "Build tool agnostic approach"
     ],
-    script: `Let's talk about why React has become so incredibly popular and what this means for you as developers.
+    script: `Understanding React as a library rather than a framework is crucial for making good architectural decisions. Libraries give you tools and let you decide how to use them. Frameworks provide structure but constrain your choices.
 
-React is one of the most widely used JavaScript libraries in the world. According to the Stack Overflow Developer Survey, it consistently ranks as one of the most loved and wanted web frameworks. This popularity translates directly into career opportunities - there's huge demand for React developers in the job market.
+React's library approach means you can:
+1. Adopt it incrementally - add React to one part of an existing app
+2. Choose your own router, state management, and build tools
+3. Swap out individual pieces as requirements change
+4. Maintain smaller bundle sizes by only including what you need
 
-But popularity isn't everything - what really matters is the ecosystem that has grown around React. There are thousands of third-party packages available for React, covering everything from UI component libraries to state management solutions to testing utilities. This means you rarely have to build everything from scratch.
+The incremental adoption example shows how React can coexist with existing vanilla JavaScript code. This is powerful for modernizing legacy applications without rewrites.
 
-The React community is incredibly active and helpful. Whether you're stuck on a problem or looking for best practices, you'll find abundant resources - tutorials, blog posts, Stack Overflow answers, and open-source examples.
+React's minimal core focuses on three things:
+1. Component rendering
+2. State management
+3. Virtual DOM reconciliation
 
-React is also backed by Meta (formerly Facebook), which means it has strong institutional support and continues to evolve with new features and improvements. The React team regularly releases updates that make the library faster, more powerful, and easier to use.
+Everything else - routing, data fetching, styling - is handled by the ecosystem. This allows you to choose best-in-class solutions for your specific needs.
 
-All of this means that investing your time in learning React is a smart career move - you're learning a skill that's in high demand and has a bright future.`,
+The trade-off is decision fatigue for beginners, but this flexibility is why React has remained relevant as the ecosystem evolved.`,
     interactions: [
       {
-        type: "Career Discussion",
-        description: "Talk about React job opportunities in your local market and show job posting examples"
+        type: "Architecture Comparison",
+        description: "Compare React + ecosystem vs Angular framework approach"
+      },
+      {
+        type: "Migration Strategy",
+        description: "Discuss strategies for adopting React in existing applications"
+      },
+      {
+        type: "Ecosystem Tour",
+        description: "Overview of popular React ecosystem libraries"
       }
     ],
     commonQuestions: [
+      {
+        question: "Which router should I use with React?",
+        answer: "React Router is the most popular and well-maintained. Next.js provides file-based routing. Choose based on your needs - client-side vs server-side routing."
+      },
+      {
+        question: "How do I handle global state without Redux?",
+        answer: "Context API for simple global state, Zustand for medium complexity, or Redux Toolkit for complex applications with time-travel debugging needs."
+      }
+    ]
+  },
+  {
+    section: "Industry Adoption & Ecosystem",
+    duration: "6-8 minutes",
+    keyPoints: [
+      "React dominates frontend job market",
+      "Enterprise adoption driven by performance and maintainability",
+      "Salary premiums for React skills",
+      "Future-proof technology choice"
+    ],
+    script: `React's popularity isn't just hype - it's driven by real technical and business advantages. The statistics are impressive, but what's behind them?
+
+Enterprise adoption happened because React solves real problems:
+1. Component reusability reduces development time
+2. Virtual DOM enables complex UIs to perform well
+3. Strong TypeScript support improves code quality
+4. Mature testing ecosystem reduces bugs
+5. Large talent pool reduces hiring risk
+
+The salary data shows React skills command premium compensation because:
+1. High demand relative to supply
+2. React developers tend to understand modern JavaScript well
+3. React skills transfer to React Native for mobile development
+4. Companies invest heavily in React-based architectures
+
+Industry trends show React expanding beyond traditional web:
+1. React Native for mobile
+2. Next.js for full-stack development
+3. React Server Components for performance
+4. React 18 Concurrent Features for UX improvements
+
+This isn't just about popularity - it's about technical excellence and business value driving adoption.`,
+    interactions: [
+      {
+        type: "Career Planning",
+        description: "Discuss React career paths and skill development strategies"
+      },
+      {
+        type: "Market Analysis",
+        description: "Review job postings and salary data in students' target markets"
+      },
+      {
+        type: "Portfolio Discussion",
+        description: "What React projects make the strongest portfolio pieces"
+      }
+    ],
+    commonQuestions: [
+      {
+        question: "Is React worth learning if I'm already proficient in another framework?",
+        answer: "Yes. React concepts transfer to other frameworks, and React's market dominance makes it valuable even as a secondary skill."
+      },
       {
         question: "Will React become obsolete soon?",
-        answer: "Very unlikely. React has been around since 2013 and continues to evolve and adapt. Its large ecosystem and community make it very stable. Even if something better comes along, React skills will remain valuable for years."
+        answer: "Unlikely. React continues to innovate (Concurrent Features, Server Components) and has massive ecosystem investment. Even if something better emerges, React skills will remain valuable for years."
       }
     ]
   },
   {
-    section: "Created by Meta/Facebook",
-    duration: "3-4 minutes",
+    section: "Meta Engineering & Open Source",
+    duration: "5-7 minutes",
     keyPoints: [
-      "Originally developed by Jordan Walke at Facebook in 2011",
-      "Open-sourced in 2013",
-      "Created to solve Facebook's specific UI problems",
-      "Now used by Facebook, Netflix, Airbnb, and many others"
+      "React emerged from real enterprise-scale problems",
+      "Open source governance includes community input",
+      "Continuous innovation through RFC process",
+      "Technical evolution shows commitment to developer experience"
     ],
-    script: `Let's briefly cover React's origins, because understanding why it was created helps explain its design principles.
+    script: `React's origin story is important because it shows the library was born from real-world, enterprise-scale problems. Facebook's news feed in 2011 had serious performance and maintainability issues with traditional approaches.
 
-React was originally developed by Jordan Walke, a software engineer at Facebook, back in 2011. Facebook was facing some serious challenges with their user interface as their application grew more complex. They had problems with data consistency, making updates efficiently, and maintaining their codebase as it scaled.
+The technical evolution is impressive:
+1. Virtual DOM (2013) - Efficient updates
+2. React Fiber (2016) - Concurrent rendering
+3. Hooks (2019) - Functional programming
+4. Concurrent Features (2022) - Better UX
 
-Facebook's news feed, for example, needed to update in real-time as new posts came in, comments were added, and likes were updated. With traditional approaches, this became increasingly difficult to manage without bugs and performance issues.
+Each major version solved real problems developers faced. This wasn't academic research - it was practical engineering solving production problems.
 
-React was Facebook's solution to these problems. It introduced concepts like the virtual DOM and unidirectional data flow specifically to address these challenges. After proving successful internally, Facebook open-sourced React in 2013, allowing the entire web development community to benefit from their innovations.
+Meta's approach to open source includes:
+1. Transparent RFC process for major changes
+2. Community feedback before implementation
+3. Gradual adoption strategy - no breaking changes
+4. Clear migration paths for major updates
 
-Today, React powers not just Facebook, but also Instagram, WhatsApp, Netflix, Airbnb, Uber, and thousands of other companies. The fact that it was born out of real-world, large-scale problems gives React a practical, battle-tested foundation.
+The design principles show thoughtful engineering:
+1. Gradual Adoption - you can migrate incrementally
+2. Developer Experience - great error messages and warnings
+3. Performance by Default - optimizations built-in
+4. Declarative API - predictable and learnable
 
-This origin story is important because it shows that React wasn't created in a vacuum - it was designed to solve real problems that developers face when building complex, interactive user interfaces.`,
+This foundation gives confidence that React will continue evolving thoughtfully rather than making disruptive changes.`,
     interactions: [
       {
-        type: "Industry Examples",
-        description: "Show examples of popular websites and apps that use React (Facebook, Instagram, Netflix, etc.)"
+        type: "Technical History",
+        description: "Show examples of how each major React version solved specific problems"
+      },
+      {
+        type: "RFC Process Demo",
+        description: "Look at current React RFCs to show community involvement"
+      },
+      {
+        type: "Future Roadmap",
+        description: "Discuss React's current priorities and upcoming features"
       }
     ],
     commonQuestions: [
       {
-        question: "Does Facebook still control React's development?",
-        answer: "Facebook (now Meta) still leads React's development, but it's open source with contributions from the community. The React team is transparent about their roadmap and accepts community input."
+        question: "Does Meta's control over React create vendor lock-in risk?",
+        answer: "React is open source with MIT license. While Meta leads development, the community contributes significantly and could fork if needed. The RFC process ensures transparency."
+      },
+      {
+        question: "How does React's evolution affect existing applications?",
+        answer: "React follows semantic versioning and provides clear migration guides. Major versions are infrequent and well-planned. Most updates are additive rather than breaking."
       }
     ]
   }
