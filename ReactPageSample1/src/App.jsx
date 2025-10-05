@@ -27,14 +27,19 @@ import PureReact from './pages/lecture3/PureReact.jsx';
 import JavaScriptEssentials from './pages/lecture3/JavaScriptEssentials.jsx';
 import ComponentsDeepDive from './pages/lecture3/ComponentsDeepDive.jsx';
 import StateAndProps from './pages/lecture3/StateAndProps.jsx';
+import ReactRouting from './pages/lecture3/ReactRouting.jsx';
+import StateManagement from './pages/lecture3/StateManagement.jsx';
+import RestAPI from './pages/lecture4/RestAPI.jsx';
+import Authentication from './pages/lecture4/Authentication.jsx';
+import Database from './pages/lecture4/Database.jsx';
 
 // Dynamic lecture data structure for easy future additions
 const lectureData = [
   {
     id: 1,
     title: "Lecture 1: E-Commerce Project",
-    color: "#fd7e14",
-    headerColor: "#d56208",
+    color: "#8B1538",
+    headerColor: "#6B0F2B",
     links: [
       { to: "/dashboard", label: "Dashboard", featured: true },
       { to: "/roadmap", label: "Roadmap", featured: true },
@@ -56,8 +61,8 @@ const lectureData = [
   {
     id: 2,
     title: "Lecture 2: DevOps & GitOps",
-    color: "#6f42c1",
-    headerColor: "#563d7c",
+    color: "#DAA520",
+    headerColor: "#B8860B",
     links: [
       { to: "/gitops-keynote", label: "GitOps Presentation", featured: true },
       { to: "/gitops-lms", label: "DevOps Academy", featured: true },
@@ -69,15 +74,28 @@ const lectureData = [
   {
     id: 3,
     title: "Lecture 3: React Fundamentals",
-    color: "#20c997",
-    headerColor: "#138c6e",
+    color: "#1B365D",
+    headerColor: "#0F1E2E",
     links: [
       { to: "/lecture3/overview", label: "React Overview", featured: true },
       { to: "/lecture3/setup", label: "Development Setup", featured: true },
       { to: "/lecture3/pure-react", label: "Pure React", featured: true },
       { to: "/lecture3/javascript-essentials", label: "JavaScript Essentials", featured: true },
       { to: "/lecture3/components", label: "Components Deep Dive", featured: true },
-      { to: "/lecture3/state-props", label: "State & Props", featured: true }
+      { to: "/lecture3/state-props", label: "State & Props", featured: true },
+      { to: "/lecture3/routing", label: "React Routing", featured: true },
+      { to: "/lecture3/state-management", label: "State Management", featured: true }
+    ]
+  },
+  {
+    id: 4,
+    title: "Lecture 4: Backend Development",
+    color: "#2D5530",
+    headerColor: "#1A3A1C",
+    links: [
+      { to: "/lecture4/rest-api", label: "REST API", featured: true },
+      { to: "/lecture4/auth", label: "Authentication", featured: true },
+      { to: "/lecture4/database", label: "Database Integration", featured: true }
     ]
   }
 ];
@@ -109,7 +127,7 @@ function Home() {
       color: '#334155'
     }}>
       <div style={{
-        background: 'linear-gradient(135deg, #333F50 0%, #161c24 100%)',
+        background: 'linear-gradient(135deg, #8B1538 0%, #6B0F2B 100%)',
         padding: isMobile ? '1.5rem' : '2rem',
         borderRadius: isMobile ? '12px' : '16px',
         marginBottom: isMobile ? '1.5rem' : '2.5rem',
@@ -127,7 +145,7 @@ function Home() {
           width: '150px',
           height: '150px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(100, 255, 218, 0.15) 0%, rgba(100, 255, 218, 0) 70%)',
+          background: 'radial-gradient(circle, rgba(218, 165, 32, 0.2) 0%, rgba(218, 165, 32, 0) 70%)',
         }} />
         <div style={{
           position: 'absolute',
@@ -136,13 +154,13 @@ function Home() {
           width: '200px',
           height: '200px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(100, 155, 255, 0.1) 0%, rgba(100, 155, 255, 0) 70%)',
+          background: 'radial-gradient(circle, rgba(27, 54, 93, 0.15) 0%, rgba(27, 54, 93, 0) 70%)',
         }} />
         
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ 
             display: 'inline-block', 
-            background: 'rgba(100, 255, 218, 0.2)', 
+            background: 'rgba(218, 165, 32, 0.25)', 
             padding: '0.35rem 0.75rem', 
             borderRadius: '20px',
             marginBottom: '0.75rem',
@@ -414,6 +432,11 @@ export default function App() {
         <Route path="/lecture3/javascript-essentials" element={<JavaScriptEssentials />} />
         <Route path="/lecture3/components" element={<ComponentsDeepDive />} />
         <Route path="/lecture3/state-props" element={<StateAndProps />} />
+        <Route path="/lecture3/routing" element={<ReactRouting />} />
+        <Route path="/lecture3/state-management" element={<StateManagement />} />
+        <Route path="/lecture4/rest-api" element={<RestAPI />} />
+        <Route path="/lecture4/auth" element={<Authentication />} />
+        <Route path="/lecture4/database" element={<Database />} />
       </Routes>
     </BrowserRouter>
   );

@@ -10,6 +10,10 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
   // Default password - can be customized per component
   const PRESENTER_PASSWORD = 'winozz';
 
+  // Mobile detection
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+    || window.innerWidth <= 768;
+
   useEffect(() => {
     // Check if user is already authenticated in this session
     const authStatus = sessionStorage.getItem(`presenter_auth_${lessonTitle}`);
@@ -41,14 +45,14 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
     return (
       <div style={{
         position: 'fixed',
-        bottom: '20px',
-        right: '20px',
+        bottom: isMobile ? '10px' : '20px',
+        right: isMobile ? '10px' : '20px',
         zIndex: 1000
       }}>
         <button
           onClick={() => setShowLogin(true)}
           style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #8B1538 0%, #6B0F2B 100%)',
             color: 'white',
             border: 'none',
             borderRadius: '50px',
@@ -195,24 +199,24 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
       {/* Presenter Notes Toggle Button */}
       <div style={{
         position: 'fixed',
-        bottom: '20px',
-        right: '20px',
+        bottom: isMobile ? '10px' : '20px',
+        right: isMobile ? '10px' : '20px',
         zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
-        gap: '10px'
+        gap: isMobile ? '8px' : '10px'
       }}>
         <button
           onClick={() => setIsVisible(!isVisible)}
           style={{
             background: isVisible 
-              ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' 
-              : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              ? 'linear-gradient(135deg, #2D5530 0%, #1A3A1C 100%)' 
+              : 'linear-gradient(135deg, #8B1538 0%, #6B0F2B 100%)',
             color: 'white',
             border: 'none',
             borderRadius: '50px',
-            padding: '12px 20px',
-            fontSize: '0.9rem',
+            padding: isMobile ? '10px 16px' : '12px 20px',
+            fontSize: isMobile ? '0.8rem' : '0.9rem',
             fontWeight: '600',
             cursor: 'pointer',
             boxShadow: isVisible 
@@ -221,10 +225,10 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
             transition: 'all 0.3s ease',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: isMobile ? '6px' : '8px'
           }}
         >
-          {isVisible ? '👁️ Hide Notes' : '📝 Show Notes'}
+          {isVisible ? (isMobile ? '👁️' : '👁️ Hide Notes') : (isMobile ? '📝' : '📝 Show Notes')}
         </button>
         
         <button
@@ -234,13 +238,13 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
             color: 'white',
             border: 'none',
             borderRadius: '50px',
-            padding: '8px 12px',
-            fontSize: '0.8rem',
+            padding: isMobile ? '6px 10px' : '8px 12px',
+            fontSize: isMobile ? '0.7rem' : '0.8rem',
             cursor: 'pointer',
             opacity: '0.8'
           }}
         >
-          🔒 Lock
+          🔒 {isMobile ? '' : 'Lock'}
         </button>
       </div>
 
@@ -255,33 +259,44 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
           background: 'rgba(0, 0, 0, 0.9)',
           zIndex: 1500,
           display: 'flex',
-          padding: '2rem'
+          padding: isMobile ? '0.5rem' : '2rem'
         }}>
           <div style={{
             background: 'white',
-            borderRadius: '16px',
+            borderRadius: isMobile ? '12px' : '16px',
             width: '100%',
-            maxWidth: '1200px',
+            maxWidth: isMobile ? '100%' : '1200px',
             margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            maxHeight: '100%'
           }}>
             {/* Header */}
             <div style={{
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               color: 'white',
-              padding: '1.5rem 2rem',
+              padding: isMobile ? '1rem' : '1.5rem 2rem',
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
+              flexShrink: 0
             }}>
-              <div>
-                <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.5rem', fontWeight: '700' }}>
-                  🎤 Presenter Notes: {lessonTitle}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h2 style={{ 
+                  margin: '0 0 0.5rem 0', 
+                  fontSize: isMobile ? '1.1rem' : '1.5rem', 
+                  fontWeight: '700',
+                  wordBreak: 'break-word'
+                }}>
+                  🎤 Presenter Notes{isMobile ? '' : `: ${lessonTitle}`}
                 </h2>
-                <p style={{ margin: '0', opacity: '0.9', fontSize: '0.95rem' }}>
+                <p style={{ 
+                  margin: '0', 
+                  opacity: '0.9', 
+                  fontSize: isMobile ? '0.8rem' : '0.95rem' 
+                }}>
                   Section {currentSection + 1} of {notes.length}
                 </p>
               </div>
@@ -292,13 +307,15 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                   color: 'white',
                   border: 'none',
                   borderRadius: '50%',
-                  width: '40px',
-                  height: '40px',
+                  width: isMobile ? '32px' : '40px',
+                  height: isMobile ? '32px' : '40px',
                   cursor: 'pointer',
-                  fontSize: '1.2rem',
+                  fontSize: isMobile ? '1rem' : '1.2rem',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  marginLeft: '1rem'
                 }}
               >
                 ×
@@ -307,11 +324,14 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
 
             {/* Navigation */}
             <div style={{
-              padding: '1rem 2rem',
+              padding: isMobile ? '0.75rem' : '1rem 2rem',
               borderBottom: '1px solid #e5e7eb',
               display: 'flex',
-              gap: '0.5rem',
-              overflowX: 'auto'
+              gap: isMobile ? '0.3rem' : '0.5rem',
+              overflowX: 'auto',
+              flexShrink: 0,
+              scrollbarWidth: 'thin',
+              WebkitOverflowScrolling: 'touch'
             }}>
               {notes.map((note, index) => (
                 <button
@@ -319,20 +339,21 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                   onClick={() => setCurrentSection(index)}
                   style={{
                     background: currentSection === index 
-                      ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' 
+                      ? 'linear-gradient(135deg, #8B1538 0%, #6B0F2B 100%)' 
                       : '#f3f4f6',
                     color: currentSection === index ? 'white' : '#374151',
                     border: 'none',
-                    borderRadius: '25px',
-                    padding: '8px 16px',
-                    fontSize: '0.85rem',
+                    borderRadius: isMobile ? '20px' : '25px',
+                    padding: isMobile ? '6px 12px' : '8px 16px',
+                    fontSize: isMobile ? '0.75rem' : '0.85rem',
                     fontWeight: '600',
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
-                    transition: 'all 0.2s ease'
+                    transition: 'all 0.2s ease',
+                    flexShrink: 0
                   }}
                 >
-                  {note.section}
+                  {isMobile ? `${index + 1}` : note.section}
                 </button>
               ))}
             </div>
@@ -341,7 +362,9 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
             <div style={{
               flex: 1,
               overflow: 'auto',
-              padding: '2rem'
+              padding: isMobile ? '1rem' : '2rem',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'thin'
             }}>
               {notes[currentSection] && (
                 <div>
@@ -376,10 +399,10 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                     <div style={{
                       background: '#fef3c7',
                       color: '#92400e',
-                      padding: '0.75rem 1rem',
+                      padding: isMobile ? '0.5rem 0.75rem' : '0.75rem 1rem',
                       borderRadius: '8px',
                       marginBottom: '1.5rem',
-                      fontSize: '0.9rem',
+                      fontSize: isMobile ? '0.8rem' : '0.9rem',
                       fontWeight: '600',
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -395,16 +418,17 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                       <h4 style={{
                         margin: '0 0 1rem 0',
                         color: '#1f2937',
-                        fontSize: '1.2rem',
+                        fontSize: isMobile ? '1rem' : '1.2rem',
                         fontWeight: '600'
                       }}>
                         🎯 Key Points to Cover:
                       </h4>
                       <ul style={{
                         margin: '0',
-                        paddingLeft: '1.5rem',
+                        paddingLeft: isMobile ? '1rem' : '1.5rem',
                         color: '#374151',
-                        lineHeight: '1.7'
+                        lineHeight: '1.7',
+                        fontSize: isMobile ? '0.9rem' : '1rem'
                       }}>
                         {notes[currentSection].keyPoints.map((point, idx) => (
                           <li key={idx} style={{ marginBottom: '0.5rem' }}>
@@ -421,7 +445,7 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                       <h4 style={{
                         margin: '0 0 1rem 0',
                         color: '#1f2937',
-                        fontSize: '1.2rem',
+                        fontSize: isMobile ? '1rem' : '1.2rem',
                         fontWeight: '600'
                       }}>
                         💬 Teaching Script:
@@ -429,9 +453,9 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                       <div style={{
                         background: '#f8fafc',
                         border: '1px solid #e2e8f0',
-                        borderRadius: '12px',
-                        padding: '1.5rem',
-                        fontSize: '1rem',
+                        borderRadius: isMobile ? '8px' : '12px',
+                        padding: isMobile ? '1rem' : '1.5rem',
+                        fontSize: isMobile ? '0.9rem' : '1rem',
                         lineHeight: '1.7',
                         color: '#334155',
                         fontFamily: 'Georgia, serif'
@@ -439,7 +463,7 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                         {notes[currentSection].script.split('\n\n').map((paragraph, idx) => (
                           <p key={idx} style={{
                             margin: idx === 0 ? '0 0 1rem 0' : '1rem 0',
-                            textAlign: 'justify'
+                            textAlign: isMobile ? 'left' : 'justify'
                           }}>
                             {paragraph}
                           </p>
@@ -454,7 +478,7 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                       <h4 style={{
                         margin: '0 0 1rem 0',
                         color: '#1f2937',
-                        fontSize: '1.2rem',
+                        fontSize: isMobile ? '1rem' : '1.2rem',
                         fontWeight: '600'
                       }}>
                         🤝 Student Interactions:
@@ -464,13 +488,13 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                           background: '#ecfdf5',
                           border: '1px solid #d1fae5',
                           borderRadius: '8px',
-                          padding: '1rem',
+                          padding: isMobile ? '0.75rem' : '1rem',
                           marginBottom: '1rem'
                         }}>
                           <h5 style={{
                             margin: '0 0 0.5rem 0',
                             color: '#065f46',
-                            fontSize: '1rem',
+                            fontSize: isMobile ? '0.9rem' : '1rem',
                             fontWeight: '600'
                           }}>
                             {interaction.type}
@@ -478,7 +502,7 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                           <p style={{
                             margin: '0',
                             color: '#047857',
-                            fontSize: '0.95rem'
+                            fontSize: isMobile ? '0.85rem' : '0.95rem'
                           }}>
                             {interaction.description}
                           </p>
@@ -493,7 +517,7 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                       <h4 style={{
                         margin: '0 0 1rem 0',
                         color: '#1f2937',
-                        fontSize: '1.2rem',
+                        fontSize: isMobile ? '1rem' : '1.2rem',
                         fontWeight: '600'
                       }}>
                         ❓ Common Student Questions:
@@ -503,13 +527,13 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                           background: '#fef7ff',
                           border: '1px solid #f3e8ff',
                           borderRadius: '8px',
-                          padding: '1rem',
+                          padding: isMobile ? '0.75rem' : '1rem',
                           marginBottom: '1rem'
                         }}>
                           <h5 style={{
                             margin: '0 0 0.5rem 0',
                             color: '#7c3aed',
-                            fontSize: '1rem',
+                            fontSize: isMobile ? '0.9rem' : '1rem',
                             fontWeight: '600'
                           }}>
                             Q: {qa.question}
@@ -517,7 +541,7 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                           <p style={{
                             margin: '0',
                             color: '#6b46c1',
-                            fontSize: '0.95rem'
+                            fontSize: isMobile ? '0.85rem' : '0.95rem'
                           }}>
                             A: {qa.answer}
                           </p>
@@ -531,30 +555,37 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
 
             {/* Footer Navigation */}
             <div style={{
-              padding: '1rem 2rem',
+              padding: isMobile ? '0.75rem 1rem' : '1rem 2rem',
               borderTop: '1px solid #e5e7eb',
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: isMobile ? '0.5rem' : '1rem'
             }}>
               <button
                 onClick={() => setCurrentSection(Math.max(0, currentSection - 1))}
                 disabled={currentSection === 0}
                 style={{
-                  background: currentSection === 0 ? '#f3f4f6' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: currentSection === 0 ? '#f3f4f6' : 'linear-gradient(135deg, #8B1538 0%, #6B0F2B 100%)',
                   color: currentSection === 0 ? '#9ca3af' : 'white',
                   border: 'none',
                   borderRadius: '8px',
-                  padding: '10px 16px',
-                  fontSize: '0.9rem',
+                  padding: isMobile ? '8px 12px' : '10px 16px',
+                  fontSize: isMobile ? '0.8rem' : '0.9rem',
                   fontWeight: '600',
-                  cursor: currentSection === 0 ? 'not-allowed' : 'pointer'
+                  cursor: currentSection === 0 ? 'not-allowed' : 'pointer',
+                  minHeight: '44px' // iOS touch target minimum
                 }}
               >
-                ← Previous
+                {isMobile ? '←' : '← Previous'}
               </button>
               
-              <span style={{ color: '#6b7280', fontSize: '0.9rem' }}>
+              <span style={{ 
+                color: '#6b7280', 
+                fontSize: isMobile ? '0.8rem' : '0.9rem',
+                fontWeight: '500'
+              }}>
                 {currentSection + 1} of {notes.length}
               </span>
 
@@ -562,17 +593,18 @@ const PresenterNotes = ({ notes, lessonTitle = "Lesson" }) => {
                 onClick={() => setCurrentSection(Math.min(notes.length - 1, currentSection + 1))}
                 disabled={currentSection === notes.length - 1}
                 style={{
-                  background: currentSection === notes.length - 1 ? '#f3f4f6' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: currentSection === notes.length - 1 ? '#f3f4f6' : 'linear-gradient(135deg, #8B1538 0%, #6B0F2B 100%)',
                   color: currentSection === notes.length - 1 ? '#9ca3af' : 'white',
                   border: 'none',
                   borderRadius: '8px',
-                  padding: '10px 16px',
-                  fontSize: '0.9rem',
+                  padding: isMobile ? '8px 12px' : '10px 16px',
+                  fontSize: isMobile ? '0.8rem' : '0.9rem',
                   fontWeight: '600',
-                  cursor: currentSection === notes.length - 1 ? 'not-allowed' : 'pointer'
+                  cursor: currentSection === notes.length - 1 ? 'not-allowed' : 'pointer',
+                  minHeight: '44px' // iOS touch target minimum
                 }}
               >
-                Next →
+                {isMobile ? '→' : 'Next →'}
               </button>
             </div>
           </div>

@@ -406,7 +406,7 @@ const PresentationMode = ({
         <div style={{
           height: '100%',
           width: `${progress}%`,
-          background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)',
+          background: 'linear-gradient(90deg, #8B1538, #DAA520)',
           transition: 'width 0.3s ease'
         }} />
       </div>
@@ -424,7 +424,7 @@ const PresentationMode = ({
           alignItems: 'center',
           justifyContent: 'center',
           padding: isMobile ? '1rem' : '2rem',
-          background: currentSlideData?.background || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: currentSlideData?.background || 'linear-gradient(135deg, #8B1538 0%, #1B365D 100%)',
           position: 'relative',
           overflow: 'hidden'
         }}>

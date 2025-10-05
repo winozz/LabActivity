@@ -1,15 +1,15 @@
-body { margin: 0; font-family: system-ui, Arial, sans-serif; background:#f5f7fa; color:#222; }
+body { margin: 0; font-family: system-ui, Arial, sans-serif; background:#f8fafc; color:#222; }
 .app-shell { padding:2rem; max-width: 760px; margin: 0 auto; }
 h1 { margin-top:0; font-size:clamp(2rem,4vw,2.8rem); }
 .checkpoint-list { list-style: none; padding:0; counter-reset: cp; }
 .checkpoint-card { background:#fff; padding:1rem 1.25rem; margin:.75rem 0; border:1px solid #e2e8f0; border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
 .checkpoint-card .desc { font-size:.9rem; margin:.35rem 0 .5rem; color:#444; }
-.checkpoint-card .tag { background:#0f172a; color:#fff; padding:.25rem .5rem; border-radius:4px; font-size:.75rem; display:inline-block; }
-a { color:#2563eb; text-decoration:none; }
+.checkpoint-card .tag { background:#8B1538; color:#fff; padding:.25rem .5rem; border-radius:4px; font-size:.75rem; display:inline-block; }
+a { color:#8B1538; text-decoration:none; }
 a:hover { text-decoration:underline; }
 .timeline { position:relative; margin:2rem 0; }
 .timeline-item { display:flex; gap:1rem; margin-bottom:1.5rem; }
-.timeline-item .marker { width:14px; height:14px; background:#2563eb; border-radius:50%; margin-top:.4rem; box-shadow:0 0 0 3px #dbeafe; }
+.timeline-item .marker { width:14px; height:14px; background:#8B1538; border-radius:50%; margin-top:.4rem; box-shadow:0 0 0 3px #f8e8ec; }
 .timeline-item .content { background:#fff; flex:1; padding:1rem 1.25rem; border:1px solid #e2e8f0; border-radius:8px; }
 .timeline-item h2 { margin:.2rem 0 .5rem; font-size:1.05rem; }
 .timeline-item ul { margin:.25rem 0 .5rem 1.1rem; padding:0; }
@@ -17,37 +17,37 @@ a:hover { text-decoration:underline; }
 .timeline-item .tagline { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:#475569; font-weight:600; }
 .progress-label { font-size:.65rem; color:#64748b; margin-top:.35rem; }
 .sequence-bar { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
-.seq-node { background:#1e293b; color:#fff; padding:.4rem .6rem; border-radius:6px; font-size:.7rem; font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.2); }
+.seq-node { background:#1B365D; color:#fff; padding:.4rem .6rem; border-radius:6px; font-size:.7rem; font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.2); }
 .sequence-labels { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.4rem; font-size:.6rem; color:#475569; }
 .commit-list { font-size:.8rem; }
-.commit-list code { background:#0f172a; color:#fff; padding:.25rem .5rem; border-radius:4px; display:inline-block; }
+.commit-list code { background:#8B1538; color:#fff; padding:.25rem .5rem; border-radius:4px; display:inline-block; }
 .dashboard .progress-panel { margin:1.5rem 0 1rem; }
 .progress-bar-wrapper { background:#e2e8f0; border-radius:6px; height:14px; overflow:hidden; box-shadow:inset 0 1px 2px rgba(0,0,0,.08); }
-.progress-bar { background:linear-gradient(90deg,#2563eb,#4f46e5); height:100%; transition:width .4s ease; }
+.progress-bar { background:linear-gradient(90deg,#8B1538,#DAA520); height:100%; transition:width .4s ease; }
 .progress-meta { font-size:.75rem; margin-top:.35rem; color:#475569; }
 .filters { display:flex; gap:1rem; flex-wrap:wrap; align-items:center; margin:1rem 0 1.5rem; }
 .filters input[type=text] { padding:.55rem .7rem; border:1px solid #cbd5e1; border-radius:6px; min-width:240px; font-size:.85rem; }
 .filters .checkbox { font-size:.75rem; display:flex; gap:.4rem; align-items:center; }
 .milestone-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1rem; }
 .milestone-card { background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:.9rem 1rem 1.1rem; position:relative; display:flex; flex-direction:column; gap:.4rem; box-shadow:0 1px 2px rgba(0,0,0,.05); }
-.milestone-card.done { border-color:#86efac; }
+.milestone-card.done { border-color:#2D5530; }
 .milestone-head { display:flex; justify-content:space-between; align-items:center; }
-.milestone-head .version { font-weight:700; font-size:.8rem; background:#1e293b; color:#fff; padding:.25rem .45rem; border-radius:4px; }
+.milestone-head .version { font-weight:700; font-size:.8rem; background:#1B365D; color:#fff; padding:.25rem .45rem; border-radius:4px; }
 .status-pill { font-size:.6rem; text-transform:uppercase; letter-spacing:.05em; padding:.25rem .5rem; border-radius:999px; font-weight:600; }
-.status-pill.complete { background:#16a34a; color:#fff; }
-.status-pill.pending { background:#fbbf24; color:#1f2937; }
+.status-pill.complete { background:#2D5530; color:#fff; }
+.status-pill.pending { background:#DAA520; color:#1f2937; }
 .milestone-card h2 { font-size:.9rem; margin:.1rem 0 .2rem; }
 .milestone-card .type { font-size:.65rem; color:#475569; text-transform:uppercase; letter-spacing:.05em; }
-.milestone-card .actions code { background:#0f172a; color:#fff; font-size:.6rem; padding:.25rem .4rem; border-radius:4px; display:inline-block; }
+.milestone-card .actions code { background:#8B1538; color:#fff; font-size:.6rem; padding:.25rem .4rem; border-radius:4px; display:inline-block; }
 .empty { font-size:.8rem; color:#64748b; }
-.version-shell code { background:#0f172a; color:#fff; padding:.25rem .5rem; border-radius:4px; font-size:.65rem; }
+.version-shell code { background:#8B1538; color:#fff; padding:.25rem .5rem; border-radius:4px; font-size:.65rem; }
 .version-shell table { background:#fff; }
 .git-graph-wrapper { margin:1.25rem 0 1.75rem; }
 .git-graph { display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-start; position:relative; }
 .git-node-wrap { position:relative; padding-left:.5rem; }
-.git-edge { position:absolute; left:-.55rem; top:0.95rem; width:1rem; height:2px; background:linear-gradient(90deg,#94a3b8,#cbd5e1); }
-.git-node { background:#1e293b; color:#fff; border:none; cursor:pointer; padding:.5rem .65rem .55rem; border-radius:10px; font-size:.6rem; letter-spacing:.05em; display:grid; row-gap:.25rem; min-width:84px; position:relative; box-shadow:0 2px 4px -1px rgba(0,0,0,.4); }
-.git-node .git-node-circle { position:absolute; top:-6px; left:8px; width:12px; height:12px; border-radius:50%; background:#475569; box-shadow:0 0 0 3px #0f172a; }
+.git-edge { position:absolute; left:-.55rem; top:0.95rem; width:1rem; height:2px; background:linear-gradient(90deg,#DAA520,#B8860B); }
+.git-node { background:#1B365D; color:#fff; border:none; cursor:pointer; padding:.5rem .65rem .55rem; border-radius:10px; font-size:.6rem; letter-spacing:.05em; display:grid; row-gap:.25rem; min-width:84px; position:relative; box-shadow:0 2px 4px -1px rgba(0,0,0,.4); }
+.git-node .git-node-circle { position:absolute; top:-6px; left:8px; width:12px; height:12px; border-radius:50%; background:#DAA520; box-shadow:0 0 0 3px #8B1538; }
 .git-node.active { background:linear-gradient(135deg,#2563eb,#4f46e5); }
 .git-node.active .git-node-circle { background:#22c55e; box-shadow:0 0 0 4px #1e293b; }
 .git-node-label { font-weight:700; font-size:.65rem; text-align:left; }
