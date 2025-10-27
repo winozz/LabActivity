@@ -374,7 +374,7 @@ module.exports = app;
   };
 
   const handleAccessPasswordSubmit = () => {
-    if (accessPassword === 'exam2025') {
+    if (accessPassword === 'exam1') {
       setIsAuthenticated(true);
       setAuthError('');
     } else {
