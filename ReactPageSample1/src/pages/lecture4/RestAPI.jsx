@@ -8,6 +8,9 @@ const RestAPI = () => {
   const [activeSection, setActiveSection] = useState('introduction');
   const [showPresentation, setShowPresentation] = useState(false);
   const [showCode, setShowCode] = useState({});
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [accessPassword, setAccessPassword] = useState('');
+  const [authError, setAuthError] = useState('');
   const styles = getMobileStyles();
 
   const toggleCode = (sectionId) => {
@@ -649,6 +652,120 @@ module.exports = { router, errorHandler, APIError, NotFoundError, ValidationErro
         presenterNotes={restAPIPresenterNotes}
         onExit={() => setShowPresentation(false)}
       />
+    );
+  }
+
+  const handleAccessPasswordSubmit = () => {
+    if (accessPassword === 'restapi2025') {
+      setIsAuthenticated(true);
+      setAuthError('');
+    } else {
+      setAuthError('Incorrect password. Please try again.');
+    }
+  };
+
+  // Render access control screen
+  if (!isAuthenticated) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: '#f5f7fa',
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        padding: '20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          maxWidth: '600px',
+          width: '100%',
+          backgroundColor: 'white',
+          borderRadius: '12px',
+          padding: '40px',
+          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+        }}>
+          <h1 style={{
+            fontSize: '2.5em',
+            color: '#2c3e50',
+            textAlign: 'center',
+            marginBottom: '10px',
+          }}>REST API Lecture</h1>
+          <h2 style={{
+            fontSize: '1.5em',
+            color: '#7f8c8d',
+            textAlign: 'center',
+            marginBottom: '30px',
+          }}>Access Control</h2>
+          
+          <div style={{ marginTop: '30px' }}>
+            <p style={{
+              color: '#7f8c8d',
+              marginBottom: '25px',
+              textAlign: 'center',
+              fontSize: '1.05em',
+            }}>
+              This lecture material is password-protected. Please enter the access password.
+            </p>
+            
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{
+                display: 'block',
+                marginBottom: '8px',
+                color: '#34495e',
+                fontWeight: 'bold',
+              }}>Access Password:</label>
+              <input
+                type="password"
+                placeholder="Enter password"
+                value={accessPassword}
+                onChange={(e) => {
+                  setAccessPassword(e.target.value);
+                  setAuthError('');
+                }}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleAccessPasswordSubmit();
+                  }
+                }}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  fontSize: '1em',
+                  border: '1px solid #ddd',
+                  borderRadius: '6px',
+                  boxSizing: 'border-box',
+                }}
+              />
+              {authError && <p style={{
+                color: '#e74c3c',
+                fontSize: '0.9em',
+                marginTop: '8px',
+                marginBottom: '0',
+              }}>{authError}</p>}
+            </div>
+
+            <button 
+              style={{
+                width: '100%',
+                padding: '15px',
+                fontSize: '1.2em',
+                fontWeight: 'bold',
+                backgroundColor: '#27ae60',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                transition: 'background-color 0.3s',
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#229954'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#27ae60'}
+              onClick={handleAccessPasswordSubmit}
+            >
+              Access Lecture
+            </button>
+          </div>
+        </div>
+      </div>
     );
   }
 

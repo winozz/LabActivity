@@ -32,6 +32,7 @@ import StateManagement from './pages/lecture3/StateManagement.jsx';
 import RestAPI from './pages/lecture4/RestAPI.jsx';
 import Authentication from './pages/lecture4/Authentication.jsx';
 import Database from './pages/lecture4/Database.jsx';
+import LabPracticalExam from './pages/lecture4/LabPracticalExam.jsx';
 
 // Dynamic lecture data structure for easy future additions
 const lectureData = [
@@ -95,7 +96,8 @@ const lectureData = [
     links: [
       { to: "/lecture4/rest-api", label: "REST API", featured: true },
       { to: "/lecture4/auth", label: "Authentication", featured: true },
-      { to: "/lecture4/database", label: "Database Integration", featured: true }
+      { to: "/lecture4/database", label: "Database Integration", featured: true },
+      { to: "/lecture4/lab-exam", label: "Lab Practical Exam", featured: true }
     ]
   }
 ];
@@ -437,6 +439,7 @@ export default function App() {
         <Route path="/lecture4/rest-api" element={<RestAPI />} />
         <Route path="/lecture4/auth" element={<Authentication />} />
         <Route path="/lecture4/database" element={<Database />} />
+        <Route path="/lecture4/lab-exam" element={<LabPracticalExam />} />
       </Routes>
     </BrowserRouter>
   );
