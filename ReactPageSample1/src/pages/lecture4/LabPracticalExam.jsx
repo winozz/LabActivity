@@ -36,78 +36,128 @@ const LabPracticalExam = () => {
   // API testing state
   const [isApiTesting, setIsApiTesting] = useState(false);
   const [testEndpoint, setTestEndpoint] = useState('/api/users');
+  const [testMethod, setTestMethod] = useState('GET');
+  const [testRequestBody, setTestRequestBody] = useState('{\n  "name": "Test User",\n  "email": "test@example.com"\n}');
+  
+  // Simulated database for API testing
+  const [simulatedUsers, setSimulatedUsers] = useState([
+    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'user' },
+    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'user' }
+  ]);
 
   const timerRef = useRef(null);
+
+  // Exam version - increment this when code changes
+  const EXAM_VERSION = 2;
 
   // Initial broken code with multiple errors to fix
   const initialCode = `// Express.js REST API - Fix the errors below
 const express = require('express');
 const app = express();
 
+// Middleware for parsing JSON (check if needed)
+app.use(express.json());
+
 // Sample users data
 const users = [
-  { id: 1, name: 'John Doe', email: 'john@example.com' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
-  { id: 3, name: 'Bob Johnson', email: 'bob@example.com' }
+  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin' },
+  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'user' },
+  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'user' }
 ];
 
 // TODO: Fix the GET endpoint below
+// Error 1: Wrong endpoint name (should be /api/users)
+// Error 2: Not sending proper JSON response
+// Error 3: Missing status code
 app.get('/api/user', (req, res) => {
-  // Error 1: Wrong endpoint name (should be /api/users)
-  // Error 2: Not sending proper JSON response
   res.send(users);
-  // Error 3: Missing status code
 });
 
-// Error 4: Wrong port variable name
+// TODO: Fix the POST endpoint to add new user
+// Error 4: Wrong HTTP method (should be POST not GET)
+// Error 5: Not accessing request body correctly
+// Error 6: Missing proper response
+app.get('/api/users', (req, res) => {
+  const newUser = {
+    id: users.length + 1,
+    name: req.body.name,
+    email: req.body.email,
+    role: 'user'
+  };
+  users.push(newUser);
+  res.send('User added');
+});
+
+// Error 7: PORT constant not defined before use
+// Error 8: Template literal syntax error
 app.listen(PORT, () => {
-  console.log('Server running on port 3000');
+  console.log('Server running on port ' + PORT);
 });
 
-// Error 5: Missing module.exports
+// Error 9: Missing module.exports
 `;
 
   const correctCode = `// Express.js REST API - Fix the errors below
 const express = require('express');
 const app = express();
 
+// Middleware for parsing JSON (check if needed)
+app.use(express.json());
+
 // Sample users data
 const users = [
-  { id: 1, name: 'John Doe', email: 'john@example.com' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
-  { id: 3, name: 'Bob Johnson', email: 'bob@example.com' }
+  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin' },
+  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'user' },
+  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'user' }
 ];
 
 // TODO: Fix the GET endpoint below
+// Error 1: Wrong endpoint name (should be /api/users)
+// Error 2: Not sending proper JSON response
+// Error 3: Missing status code
 app.get('/api/users', (req, res) => {
-  // Error 1: Wrong endpoint name (should be /api/users)
-  // Error 2: Not sending proper JSON response
   res.status(200).json(users);
-  // Error 3: Missing status code
 });
 
-// Error 4: Wrong port variable name
+// TODO: Fix the POST endpoint to add new user
+// Error 4: Wrong HTTP method (should be POST not GET)
+// Error 5: Not accessing request body correctly
+// Error 6: Missing proper response
+app.post('/api/users', (req, res) => {
+  const newUser = {
+    id: users.length + 1,
+    name: req.body.name,
+    email: req.body.email,
+    role: 'user'
+  };
+  users.push(newUser);
+  res.status(201).json(newUser);
+});
+
+// Error 7: PORT constant not defined before use
+// Error 8: Template literal syntax error
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(\`Server running on port \${PORT}\`);
 });
 
-// Error 5: Missing module.exports
+// Error 9: Missing module.exports
 module.exports = app;
 `;
 
   const hints = [
     {
-      title: "Hint 1: Endpoint Path",
-      content: "Check the endpoint path carefully. The endpoint should be plural (/api/users), not singular. This is a REST API convention for collections."
+      title: "Hint 1: GET Endpoint",
+      content: "The GET endpoint path should be plural (/api/users). Use res.status(200).json(users) to send the response with proper status code and JSON format."
     },
     {
-      title: "Hint 2: Response Method",
-      content: "Use res.json() instead of res.send() for JSON responses, and don't forget to set the HTTP status code with res.status(200) before sending the response."
+      title: "Hint 2: POST Endpoint",
+      content: "Change app.get() to app.post() for the second endpoint. Use res.status(201).json(newUser) to return the created user with HTTP 201 (Created) status code."
     },
     {
-      title: "Hint 3: Port and Exports",
-      content: "Define the PORT constant before using it in app.listen(), and remember to export your Express app using module.exports = app at the end of the file."
+      title: "Hint 3: Server Configuration",
+      content: "Define 'const PORT = 3000;' before app.listen(). Use template literals: console.log(`Server running on port ${PORT}`). Add 'module.exports = app;' at the end."
     }
   ];
 
@@ -117,6 +167,13 @@ module.exports = app;
     
     if (storedSession) {
       const session = JSON.parse(storedSession);
+      
+      // Check if exam version matches, if not, clear old session
+      if (session.version !== EXAM_VERSION) {
+        console.log('Exam version mismatch. Clearing old session...');
+        localStorage.removeItem('labExamSession');
+        return;
+      }
       
       // Check if exam was already completed
       if (session.completed) {
@@ -177,6 +234,7 @@ module.exports = app;
     const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const session = {
       id: newSessionId,
+      version: EXAM_VERSION,
       startTime: Date.now(),
       code: initialCode,
       hintsUsed: [false, false, false],
@@ -218,49 +276,83 @@ module.exports = app;
     const errors = [];
     const checks = [];
 
-    // Check 1: Correct endpoint path
+    // Check 1: Correct GET endpoint path (15 points)
     if (code.includes("app.get('/api/users'")) {
-      checks.push({ test: "Endpoint path is /api/users", passed: true });
+      checks.push({ test: "GET endpoint path is /api/users", passed: true });
     } else {
-      checks.push({ test: "Endpoint path is /api/users", passed: false });
-      errors.push("Endpoint should be '/api/users' (plural)");
-      points -= 20;
-    }
-
-    // Check 2: Using res.json()
-    if (code.includes('res.json(users)') || code.includes('res.json( users )')) {
-      checks.push({ test: "Using res.json() for response", passed: true });
-    } else {
-      checks.push({ test: "Using res.json() for response", passed: false });
-      errors.push("Should use res.json() instead of res.send()");
-      points -= 20;
-    }
-
-    // Check 3: Status code
-    if (code.includes('res.status(200)') || code.includes('res.status( 200 )')) {
-      checks.push({ test: "HTTP status 200 is set", passed: true });
-    } else {
-      checks.push({ test: "HTTP status 200 is set", passed: false });
-      errors.push("Should set HTTP status code with res.status(200)");
+      checks.push({ test: "GET endpoint path is /api/users", passed: false });
+      errors.push("GET endpoint should be '/api/users' (plural)");
       points -= 15;
     }
 
-    // Check 4: PORT constant defined
+    // Check 2: Using res.json() for GET (15 points)
+    // Extract the GET endpoint block - find app.get and capture until the closing });
+    const getMatch = code.match(/app\.get\s*\(\s*['"]\/api\/users['"]\s*,\s*\([^)]*\)\s*=>\s*\{[^}]*\}\s*\)/);
+    const hasGetJson = code.includes("app.get('/api/users'") && (code.includes('res.json(users)') || code.includes('.json(users)'));
+    if (hasGetJson) {
+      checks.push({ test: "GET uses res.json() for response", passed: true });
+    } else {
+      checks.push({ test: "GET uses res.json() for response", passed: false });
+      errors.push("GET should use res.json(users) instead of res.send()");
+      points -= 15;
+    }
+
+    // Check 3: Status code for GET (10 points)
+    const hasGetStatus = code.includes("app.get('/api/users'") && code.includes('res.status(200)');
+    if (hasGetStatus) {
+      checks.push({ test: "GET has HTTP status 200", passed: true });
+    } else {
+      checks.push({ test: "GET has HTTP status 200", passed: false });
+      errors.push("GET should set HTTP status code with res.status(200)");
+      points -= 10;
+    }
+
+    // Check 4: POST method used correctly (15 points)
+    if (code.includes("app.post('/api/users'")) {
+      checks.push({ test: "POST method used for creating users", passed: true });
+    } else {
+      checks.push({ test: "POST method used for creating users", passed: false });
+      errors.push("Should use app.post() not app.get() for adding users");
+      points -= 15;
+    }
+
+    // Check 5: POST returns JSON response (15 points)
+    // Check if both app.post and res.json(newUser) exist
+    const hasPostJson = code.includes("app.post('/api/users'") && (code.includes('res.json(newUser)') || code.includes('.json(newUser)'));
+    if (hasPostJson) {
+      checks.push({ test: "POST returns JSON response with new user", passed: true });
+    } else {
+      checks.push({ test: "POST returns JSON response with new user", passed: false });
+      errors.push("POST should return res.json(newUser) not res.send()");
+      points -= 15;
+    }
+
+    // Check 6: POST has 201 status code (10 points)
+    const hasPostStatus = code.includes("app.post('/api/users'") && code.includes('res.status(201)');
+    if (hasPostStatus) {
+      checks.push({ test: "POST has HTTP status 201", passed: true });
+    } else {
+      checks.push({ test: "POST has HTTP status 201", passed: false });
+      errors.push("POST should use res.status(201) for resource creation");
+      points -= 10;
+    }
+
+    // Check 7: PORT constant defined (10 points)
     if (code.includes('const PORT') || code.includes('let PORT') || code.includes('var PORT')) {
       checks.push({ test: "PORT constant is defined", passed: true });
     } else {
       checks.push({ test: "PORT constant is defined", passed: false });
       errors.push("PORT variable must be defined before use");
-      points -= 15;
+      points -= 10;
     }
 
-    // Check 5: Module exports
+    // Check 8: Module exports (10 points)
     if (code.includes('module.exports')) {
       checks.push({ test: "App is exported with module.exports", passed: true });
     } else {
       checks.push({ test: "App is exported with module.exports", passed: false });
       errors.push("Missing module.exports = app");
-      points -= 15;
+      points -= 10;
     }
 
     // Deduct points for hints
@@ -319,39 +411,95 @@ module.exports = app;
     
     // Simulate API call
     setTimeout(() => {
-      // Check if the code would work
-      const hasCorrectEndpoint = studentCode.includes("app.get('/api/users'");
-      const hasJsonResponse = studentCode.includes('res.json(users)');
-      const hasStatus = studentCode.includes('res.status(200)');
+      if (testMethod === 'GET') {
+        // Test GET endpoint
+        const hasCorrectEndpoint = studentCode.includes("app.get('/api/users'");
+        const hasJsonResponse = studentCode.includes('res.json(users)') || studentCode.includes('.json(users)');
+        const hasStatus = studentCode.includes('res.status(200)');
 
-      if (hasCorrectEndpoint && hasJsonResponse && hasStatus) {
-        setApiResponse({
-          status: 200,
-          statusText: 'OK',
-          data: [
-            { id: 1, name: 'John Doe', email: 'john@example.com' },
-            { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
-            { id: 3, name: 'Bob Johnson', email: 'bob@example.com' }
-          ],
-          headers: {
-            'content-type': 'application/json',
-            'x-powered-by': 'Express'
+        if (hasCorrectEndpoint && hasJsonResponse && hasStatus) {
+          setApiResponse({
+            status: 200,
+            statusText: 'OK',
+            data: simulatedUsers,
+            headers: {
+              'content-type': 'application/json',
+              'x-powered-by': 'Express'
+            }
+          });
+        } else if (!hasCorrectEndpoint) {
+          setApiResponse({
+            status: 404,
+            statusText: 'Not Found',
+            data: { error: 'Cannot GET /api/users' },
+            headers: { 'content-type': 'application/json' }
+          });
+        } else if (!hasJsonResponse || !hasStatus) {
+          setApiResponse({
+            status: 200,
+            statusText: 'OK',
+            data: 'Warning: Response format may be incorrect',
+            headers: { 'content-type': 'text/html' }
+          });
+        }
+      } else {
+        // Test POST endpoint
+        const hasCorrectMethod = studentCode.includes("app.post('/api/users'");
+        const hasJsonResponse = studentCode.includes('res.json(newUser)') || studentCode.includes('.json(newUser)');
+        const hasStatus201 = studentCode.includes('res.status(201)');
+
+        if (hasCorrectMethod && hasJsonResponse && hasStatus201) {
+          try {
+            const requestBody = JSON.parse(testRequestBody);
+            const newUser = {
+              id: simulatedUsers.length + 1,
+              name: requestBody.name,
+              email: requestBody.email,
+              role: 'user'
+            };
+            
+            // Add user to simulated database
+            setSimulatedUsers(prev => [...prev, newUser]);
+            
+            setApiResponse({
+              status: 201,
+              statusText: 'Created',
+              data: newUser,
+              headers: {
+                'content-type': 'application/json',
+                'x-powered-by': 'Express'
+              }
+            });
+          } catch (e) {
+            setApiResponse({
+              status: 400,
+              statusText: 'Bad Request',
+              data: { error: 'Invalid JSON in request body' },
+              headers: { 'content-type': 'application/json' }
+            });
           }
-        });
-      } else if (!hasCorrectEndpoint) {
-        setApiResponse({
-          status: 404,
-          statusText: 'Not Found',
-          data: { error: 'Cannot GET /api/users' },
-          headers: { 'content-type': 'application/json' }
-        });
-      } else if (!hasJsonResponse || !hasStatus) {
-        setApiResponse({
-          status: 200,
-          statusText: 'OK',
-          data: 'Warning: Response format may be incorrect',
-          headers: { 'content-type': 'text/html' }
-        });
+        } else if (!hasCorrectMethod) {
+          setApiResponse({
+            status: 404,
+            statusText: 'Not Found',
+            data: { error: 'Cannot POST /api/users - Check HTTP method' },
+            headers: { 'content-type': 'application/json' }
+          });
+        } else if (!hasStatus201) {
+          setApiResponse({
+            status: 200,
+            statusText: 'OK',
+            data: { message: 'User added', warning: 'Should use 201 status for resource creation' },
+            headers: { 'content-type': 'application/json' }
+          });
+        } else {
+          setApiResponse({
+            status: 200,
+            statusText: 'OK',
+            data: 'Warning: Response format may be incorrect',
+            headers: { 'content-type': 'text/html' }
+          });
+        }
       }
       
       setIsApiTesting(false);
@@ -843,6 +991,7 @@ module.exports = app;
             <h3>API Documentation & Tester</h3>
             
             <div style={styles.apiDocs}>
+              {/* GET Endpoint */}
               <div style={styles.endpointCard}>
                 <div style={styles.methodBadge}>GET</div>
                 <code style={styles.endpointPath}>/api/users</code>
@@ -852,43 +1001,118 @@ module.exports = app;
                 Retrieves a list of all users from the database.
               </p>
 
-              <h4 style={styles.sectionTitle}>Expected Response</h4>
+              <h4 style={styles.sectionTitle}>GET Response</h4>
+              <pre style={styles.codeBlock}>
+{`Status: 200 OK
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "admin"
+  },
+  ...
+]`}
+              </pre>
+
+              {/* POST Endpoint */}
+              <div style={{...styles.endpointCard, marginTop: '20px'}}>
+                <div style={{...styles.methodBadge, backgroundColor: '#3498db'}}>POST</div>
+                <code style={styles.endpointPath}>/api/users</code>
+              </div>
+              
+              <p style={styles.apiDescription}>
+                Creates a new user in the database.
+              </p>
+
+              <h4 style={styles.sectionTitle}>POST Request Body</h4>
               <pre style={styles.codeBlock}>
 {`{
-  "status": 200,
-  "data": [
-    {
-      "id": 1,
-      "name": "John Doe",
-      "email": "john@example.com"
-    },
-    ...
-  ]
+  "name": "New User",
+  "email": "newuser@example.com"
+}`}
+              </pre>
+
+              <h4 style={styles.sectionTitle}>POST Response</h4>
+              <pre style={styles.codeBlock}>
+{`Status: 201 Created
+{
+  "id": 4,
+  "name": "New User",
+  "email": "newuser@example.com",
+  "role": "user"
 }`}
               </pre>
 
               <h4 style={styles.sectionTitle}>Response Codes</h4>
               <div style={styles.responseCode}>
-                <span style={styles.code200}>200</span> Success - Returns array of users
+                <span style={styles.code200}>200</span> OK - GET success
+              </div>
+              <div style={styles.responseCode}>
+                <span style={{...styles.code200, backgroundColor: '#3498db'}}>201</span> Created - POST success
               </div>
               <div style={styles.responseCode}>
                 <span style={styles.code404}>404</span> Not Found - Endpoint doesn't exist
               </div>
             </div>
 
-            <button 
-              style={styles.testApiButton}
-              onClick={testApiEndpoint}
-              disabled={isApiTesting}
-            >
-              {isApiTesting ? 'Testing...' : 'Test API Endpoint'}
-            </button>
+            {/* API Tester Interface */}
+            <div style={styles.apiTester}>
+              <h4 style={styles.sectionTitle}>Test Your API</h4>
+              
+              <div style={styles.testerRow}>
+                <label style={styles.testerLabel}>Method:</label>
+                <select 
+                  value={testMethod} 
+                  onChange={(e) => setTestMethod(e.target.value)}
+                  style={styles.methodSelect}
+                >
+                  <option value="GET">GET</option>
+                  <option value="POST">POST</option>
+                </select>
+              </div>
+
+              {testMethod === 'POST' && (
+                <div style={styles.testerRow}>
+                  <label style={styles.testerLabel}>Request Body (JSON):</label>
+                  <textarea
+                    value={testRequestBody}
+                    onChange={(e) => setTestRequestBody(e.target.value)}
+                    style={styles.requestBodyInput}
+                    placeholder='{"name": "Test User", "email": "test@example.com"}'
+                    rows={4}
+                  />
+                </div>
+              )}
+
+              <button 
+                style={styles.testApiButton}
+                onClick={testApiEndpoint}
+                disabled={isApiTesting}
+              >
+                {isApiTesting ? 'Testing...' : `Test ${testMethod} /api/users`}
+              </button>
+
+              <button 
+                style={{...styles.testApiButton, backgroundColor: '#e74c3c', marginTop: '10px'}}
+                onClick={() => {
+                  setSimulatedUsers([
+                    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin' },
+                    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'user' },
+                    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'user' }
+                  ]);
+                  setApiResponse(null);
+                }}
+              >
+                Reset Database
+              </button>
+            </div>
 
             {apiResponse && (
               <div style={styles.apiResponse}>
                 <h4>Response</h4>
                 <div style={styles.responseStatus}>
-                  <span style={apiResponse.status === 200 ? styles.statusSuccess : styles.statusError}>
+                  <span style={apiResponse.status >= 200 && apiResponse.status < 300 ? styles.statusSuccess : styles.statusError}>
                     {apiResponse.status} {apiResponse.statusText}
                   </span>
                 </div>
@@ -1830,6 +2054,42 @@ const styles = {
     borderRadius: '4px',
     color: '#f39c12',
     borderLeft: '3px solid #f39c12',
+  },
+  apiTester: {
+    marginBottom: '15px',
+  },
+  testerRow: {
+    marginBottom: '12px',
+  },
+  testerLabel: {
+    display: 'block',
+    color: '#61dafb',
+    fontWeight: 'bold',
+    marginBottom: '6px',
+    fontSize: '0.95em',
+  },
+  methodSelect: {
+    width: '100%',
+    padding: '8px',
+    backgroundColor: '#2d2d2d',
+    color: '#d4d4d4',
+    border: '1px solid #3e3e3e',
+    borderRadius: '4px',
+    fontSize: '0.9em',
+    cursor: 'pointer',
+  },
+  requestBodyInput: {
+    width: '100%',
+    minHeight: '100px',
+    padding: '10px',
+    backgroundColor: '#1e1e1e',
+    color: '#d4d4d4',
+    border: '1px solid #3e3e3e',
+    borderRadius: '4px',
+    fontFamily: 'monospace',
+    fontSize: '0.9em',
+    resize: 'vertical',
+    lineHeight: '1.5',
   },
 };
 
